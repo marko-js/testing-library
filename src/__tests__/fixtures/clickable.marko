@@ -1,0 +1,13 @@
+class {
+  onCreate() {
+    this.clickCount = 0;
+  }
+
+  handleClick() {
+    this.emit("button-click", { count: this.clickCount++ });
+  }
+}
+
+<div>
+  <button on-click("handleClick")>Click</button>
+</div>
