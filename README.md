@@ -40,7 +40,7 @@
 
 ## Table of Contents
 
-- [**Read The Docs**](https://testing-library.com/marko) | [Edit the docs](https://github.com/testing-library/testing-library-docs)
+- [**Read The Docs**](https://testing-library.com/docs/marko-testing-library/intro) | [Edit the docs](https://github.com/testing-library/testing-library-docs)
 - [The problem](#the-problem)
 - [This solution](#this-solution)
 - [Installation](#installation)
@@ -89,10 +89,9 @@ import { render } from "@marko/testing-library";
 import HelloTemplate from "./src/__test__/fixtures/hello-name.marko";
 
 test("contains the text", async () => {
-  const { getByText, rerender } = await render(
-    HelloTemplate,
-    { name: "World" }
-  );
+  const { getByText, rerender } = await render(HelloTemplate, {
+    name: "World"
+  });
 
   // Will find the element within the rendered result from the template.
   expect(getByText("Hello World")).toBeInTheDocument();
@@ -108,12 +107,9 @@ The render result will also provide you with a `container` HTMLElement. This act
 
 ```javascript
 test("not a great test", async () => {
-  const { container } = await render(
-    HelloTemplate,
-    { name: "World" }
-  );
+  const { container } = await render(HelloTemplate, { name: "World" });
 
-  expect(container.querySelector('div')).toBeInTheDocument();
+  expect(container.querySelector("div")).toBeInTheDocument();
 });
 ```
 
@@ -155,6 +151,7 @@ In Jest there is a [browser option](https://jestjs.io/docs/en/configuration#brow
 To test components rendered in the client side, be sure to enable both the `browser` option and the preset and you are good to go!
 
 **jest.config.js**
+
 ```javascript
 module.exports = {
   preset: "@marko/jest",
@@ -165,16 +162,18 @@ module.exports = {
 For testing components rendered server side we can omit the `browser` option, however ideally you should also set the [`testEnvironment option`](https://jestjs.io/docs/en/configuration#testenvironment-string) to `node` which will disable loading JSDOM globally.
 
 **jest.config.js**
+
 ```javascript
 module.exports = {
   preset: "@marko/jest",
-  testEnvironment: "node", // Tells Jest not to load a global JSDOM for server side.
+  testEnvironment: "node" // Tells Jest not to load a global JSDOM for server side.
 };
 ```
 
 A Jest configuration can also have multiple [projects](https://jestjs.io/docs/en/configuration#projects-array-string-projectconfig) which we can use to create a combined configuration for server side tests, and browser side tests, like so:
 
 **jest.config.js**
+
 ```javascript
 module.exports = {
   projects: [
@@ -219,7 +218,7 @@ that closely resemble how your Marko components are used.
 Utilities are included in this project based on the following guiding
 principles:
 
-1.  If it relates to rendering components, then it should deal with DOM nodes 
+1.  If it relates to rendering components, then it should deal with DOM nodes
     rather than component instances, and it should not encourage dealing with
     component instances.
 2.  It should be generally useful for testing the application components in the
@@ -234,7 +233,7 @@ light-weight, simple, and understandable.
 
 ## Docs
 
-[**Read The Docs**](https://testing-library.com/marko) |
+[**Read The Docs**](https://testing-library.com/docs/marko-testing-library/intro) |
 [Edit the docs](https://github.com/testing-library/testing-library-docs)
 
 ## Code of Conduct
