@@ -49,6 +49,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "ci:report": "cat coverage/lcov.info | coveralls",
     "ci:test": "npm run test -- --coverage",
     "format": "prettier \"**/*.{json,md,js,ts}\" --write",
