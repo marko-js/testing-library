@@ -30,6 +30,7 @@
   },
   "files": [
     "dist",
+    "index.js",
     "cleanup-after-each.js"
   ],
   "homepage": "https://github.com/marko-js/testing-library",
