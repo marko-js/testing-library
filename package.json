@@ -5,7 +5,7 @@
   "author": "Dylan Piercey <dpiercey@ebay.com>",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
-    "@testing-library/dom": "^5.2.1",
+    "@testing-library/dom": "^5.4.0",
     "jsdom": "^15.1.1",
     "tslib": "^1.10.0"
   },
@@ -38,8 +38,7 @@
     "testing-library"
   ],
   "license": "MIT",
-  "main": "dist/index.js",
-  "browser": "dist/index-browser.js",
+  "main": "index.js",
   "peerDependencies": {
     "marko": "^4"
   },
@@ -48,7 +47,7 @@
     "url": "https://github.com/marko-js/testing-library"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp ./src/package.json ./dist/package.json",
     "prepublishOnly": "npm run build",
     "ci:report": "cat coverage/lcov.info | coveralls",
     "ci:test": "npm run test -- --coverage",

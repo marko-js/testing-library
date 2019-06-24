@@ -1,5 +1,5 @@
 import "jest-dom/extend-expect";
-import { render, cleanup } from "../index-browser";
+import { render, cleanup } from "..";
 import HelloWorld from "./fixtures/hello-world.marko";
 
 beforeEach(() => {

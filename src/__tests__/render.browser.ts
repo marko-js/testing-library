@@ -1,5 +1,5 @@
 import "jest-dom/extend-expect";
-import { render, fireEvent, wait, cleanup } from "../index-browser";
+import { render, fireEvent, wait, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
 import HelloWorld from "./fixtures/hello-world.marko";
 import HelloName from "./fixtures/hello-name.marko";
