@@ -25,7 +25,7 @@ export async function render<T extends Template>(
     ): NonNullable<EventRecord[N]> {
       throw new Error("Component's should not emit events on the server side");
     },
-    rerender(newInput: typeof input): Promise<void> {
+    rerender(newInput?: typeof input): Promise<void> {
       return Promise.reject(
         new Error("Component's cannot re-render on the server side")
       );

@@ -1,6 +1,7 @@
 import "jest-dom/extend-expect";
 import { render, fireEvent, wait, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
+import UpdateCounter from "./fixtures/update-counter.marko";
 import HelloWorld from "./fixtures/hello-world.marko";
 import HelloName from "./fixtures/hello-name.marko";
 import Clickable from "./fixtures/clickable.marko";
@@ -16,7 +17,7 @@ test("renders interactive content in the document", async () => {
   await wait(() => expect(getByText("Value: 1")));
 });
 
-test("can be rerendered", async () => {
+test("can be rerendered with new input", async () => {
   const { getByText, rerender } = await render(HelloName, { name: "Michael" });
 
   expect(getByText(/Hello \w+/)).toHaveProperty(
@@ -29,6 +30,22 @@ test("can be rerendered", async () => {
   expect(getByText(/Hello \w+/)).toHaveProperty(
     "textContent",
     expect.stringContaining("Dylan")
+  );
+});
+
+test("can be rerendered with no input (forced update)", async () => {
+  const { getByText, rerender } = await render(UpdateCounter);
+
+  expect(getByText(/Render Count: \d+/)).toHaveProperty(
+    "textContent",
+    expect.stringContaining("Render Count: 1")
+  );
+
+  await rerender();
+
+  expect(getByText(/Render Count: \d+/)).toHaveProperty(
+    "textContent",
+    expect.stringContaining("Render Count: 2")
   );
 });
 

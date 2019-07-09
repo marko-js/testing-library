@@ -61,10 +61,15 @@ export async function render<T extends Template>(
 
       return copy as NonNullable<EventRecord[N]>;
     },
-    rerender(newInput: typeof input): Promise<void> {
+    rerender(newInput?: typeof input): Promise<void> {
       return new Promise(resolve => {
         component.once("update", () => resolve());
-        component.input = newInput;
+
+        if (newInput) {
+          component.input = newInput;
+        } else {
+          component.forceUpdate();
+        }
       });
     },
     // eslint-disable-next-line no-console

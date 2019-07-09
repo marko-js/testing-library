@@ -1,0 +1,12 @@
+class {
+  onCreate() {
+    this.renderCount = 0;
+  }
+  onRender() {
+    this.renderCount++;
+  }
+}
+
+<div>
+  Render Count: ${component.renderCount}
+</div>
