@@ -20,8 +20,17 @@ export async function render<T extends Template>(
     container = document.body.appendChild(document.createElement("div"))
   } = options;
 
-  const result = await template.render(input);
-  const component = result.appendTo(container).getComponent();
+  // Doesn't use promise API so that we can support Marko v3
+  const renderResult = (await new Promise((resolve, reject) =>
+    template.render(input, (err, result) =>
+      err ? reject(err) : resolve(result)
+    )
+  )) as any;
+
+  const isV3 = !renderResult.getComponent;
+  const component = renderResult
+    .appendTo(container)
+    [isV3 ? "getWidget" : "getComponent"]();
   const eventRecord: EventRecord = {};
   mountedComponents.add({ container, component });
 
@@ -63,12 +72,22 @@ export async function render<T extends Template>(
     },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise(resolve => {
-        component.once("update", () => resolve());
+        if (isV3) {
+          component.once("render", () => resolve());
 
-        if (newInput) {
-          component.input = newInput;
+          if (newInput) {
+            component.setProps(newInput);
+          } else {
+            component.setStateDirty("__forceUpdate__");
+          }
         } else {
-          component.forceUpdate();
+          component.once("update", () => resolve());
+
+          if (newInput) {
+            component.input = newInput;
+          } else {
+            component.forceUpdate();
+          }
         }
       });
     },

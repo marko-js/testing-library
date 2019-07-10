@@ -11,10 +11,17 @@ export * from "@testing-library/dom";
 
 export async function render<T extends Template>(
   template: T,
-  input: Parameters<T["render"]>[0] = {},
+  input: Parameters<T["renderToString"]>[0] = {},
   options?: RenderOptions
 ) {
-  const html = String(await template.render(input));
+  // Doesn't use promise API so that we can support Marko v3
+  const html = String(
+    await new Promise((resolve, reject) =>
+      template.renderToString(input, (err, result) =>
+        err ? reject(err) : resolve(result)
+      )
+    )
+  );
   const container = JSDOM.fragment(html);
   (container as any).outerHTML = html; // Fixes prettyDOM for container
 
