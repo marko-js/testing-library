@@ -23,14 +23,14 @@ export async function render<T extends Template>(
   // Doesn't use promise API so that we can support Marko v3
   const renderResult = (await new Promise((resolve, reject) =>
     template.render(input, (err, result) =>
-      err ? reject(err) : resolve(result)
+      err ? /* istanbul ignore next */ reject(err) : resolve(result)
     )
   )) as any;
 
   const isV3 = !renderResult.getComponent;
   const component = renderResult
     .appendTo(container)
-    [isV3 ? "getWidget" : "getComponent"]();
+    [isV3 ? /* istanbul ignore next */ "getWidget" : "getComponent"]();
   const eventRecord: EventRecord = {};
   mountedComponents.add({ container, component });
 
@@ -72,6 +72,7 @@ export async function render<T extends Template>(
     },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise(resolve => {
+        /* istanbul ignore if  */
         if (isV3) {
           component.once("render", () => resolve());
 

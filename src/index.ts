@@ -18,7 +18,7 @@ export async function render<T extends Template>(
   const html = String(
     await new Promise((resolve, reject) =>
       template.renderToString(input, (err, result) =>
-        err ? reject(err) : resolve(result)
+        err ? /* istanbul ignore next */ reject(err) : resolve(result)
       )
     )
   );
