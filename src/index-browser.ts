@@ -105,12 +105,16 @@ export async function render<T extends Template>(
       }
     },
     ...within((container as any) as HTMLElement)
-  };
+  } as const;
 }
 
 export function cleanup() {
   mountedComponents.forEach(destroyComponent);
 }
+
+export type RenderResult = Parameters<
+  NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
+>[0];
 
 function destroyComponent({ container, component }) {
   component.destroy();

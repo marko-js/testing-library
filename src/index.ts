@@ -50,8 +50,12 @@ export async function render<T extends Template>(
       }
     },
     ...within((container as any) as HTMLElement)
-  };
+  } as const;
 }
 
 /* istanbul ignore next: There is no cleanup for SSR. */
 export function cleanup() {}
+
+export type RenderResult = Parameters<
+  NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
+>[0];
