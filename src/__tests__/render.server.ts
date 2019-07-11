@@ -1,10 +1,19 @@
 import { render, fireEvent } from "..";
 import Counter from "./fixtures/counter.marko";
+import LegacyCounter from "./fixtures/legacy-counter";
 import Clickable from "./fixtures/clickable.marko";
 import HelloName from "./fixtures/hello-name.marko";
 
 test("renders static content in a document without a browser context", async () => {
   const { getByText } = await render(Counter);
+  expect(getByText("Value: 0")).toHaveProperty(
+    ["ownerDocument", "defaultView"],
+    null
+  );
+});
+
+test("renders static content from a Marko 3 component", async () => {
+  const { getByText } = await render(LegacyCounter);
   expect(getByText("Value: 0")).toHaveProperty(
     ["ownerDocument", "defaultView"],
     null

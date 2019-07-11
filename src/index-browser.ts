@@ -20,8 +20,17 @@ export async function render<T extends Template>(
     container = document.body.appendChild(document.createElement("div"))
   } = options;
 
-  const result = await template.render(input);
-  const component = result.appendTo(container).getComponent();
+  // Doesn't use promise API so that we can support Marko v3
+  const renderResult = (await new Promise((resolve, reject) =>
+    template.render(input, (err, result) =>
+      err ? /* istanbul ignore next */ reject(err) : resolve(result)
+    )
+  )) as any;
+
+  const isV3 = !renderResult.getComponent;
+  const component = renderResult
+    .appendTo(container)
+    [isV3 ? /* istanbul ignore next */ "getWidget" : "getComponent"]();
   const eventRecord: EventRecord = {};
   mountedComponents.add({ container, component });
 
@@ -63,12 +72,23 @@ export async function render<T extends Template>(
     },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise(resolve => {
-        component.once("update", () => resolve());
+        /* istanbul ignore if  */
+        if (isV3) {
+          component.once("render", () => resolve());
 
-        if (newInput) {
-          component.input = newInput;
+          if (newInput) {
+            component.setProps(newInput);
+          } else {
+            component.setStateDirty("__forceUpdate__");
+          }
         } else {
-          component.forceUpdate();
+          component.once("update", () => resolve());
+
+          if (newInput) {
+            component.input = newInput;
+          } else {
+            component.forceUpdate();
+          }
         }
       });
     },
@@ -85,12 +105,16 @@ export async function render<T extends Template>(
       }
     },
     ...within((container as any) as HTMLElement)
-  };
+  } as const;
 }
 
 export function cleanup() {
   mountedComponents.forEach(destroyComponent);
 }
+
+export type RenderResult = Parameters<
+  NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
+>[0];
 
 function destroyComponent({ container, component }) {
   component.destroy();

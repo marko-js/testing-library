@@ -8,7 +8,11 @@ export interface RenderOptions {
 }
 
 export interface Template {
-  render(input: unknown): Promise<any>;
+  renderToString(
+    input: unknown,
+    cb: (err: Error | null, result: any) => void
+  ): any;
+  render(input: unknown, cb: (err: Error | null, result: any) => void): any;
 }
 
 export const INTERNAL_EVENTS = [
