@@ -15,9 +15,7 @@ export async function render<T extends Template>(
   options?: RenderOptions
 ) {
   // Doesn't use promise API so that we can support Marko v3
-  const renderMethod = template.renderToString
-    ? "renderToString"
-    : /* istanbul ignore next */ "render";
+  const renderMethod = template.renderToString ? "renderToString" : "render";
   const html = String(
     await new Promise((resolve, reject) =>
       template[renderMethod](input, (err, result) =>

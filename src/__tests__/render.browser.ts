@@ -1,6 +1,7 @@
 import "jest-dom/extend-expect";
 import { render, fireEvent, wait, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
+import LegacyCounter from "./fixtures/legacy-counter";
 import UpdateCounter from "./fixtures/update-counter.marko";
 import HelloWorld from "./fixtures/hello-world.marko";
 import HelloName from "./fixtures/hello-name.marko";
@@ -10,6 +11,15 @@ afterEach(cleanup);
 
 test("renders interactive content in the document", async () => {
   const { getByText } = await render(Counter);
+  expect(getByText(/Value: 0/)).toBeInTheDocument();
+
+  fireEvent.click(getByText("Increment"));
+
+  await wait(() => expect(getByText("Value: 1")));
+});
+
+test("renders interactive content in the document with Marko 3", async () => {
+  const { getByText } = await render(LegacyCounter);
   expect(getByText(/Value: 0/)).toBeInTheDocument();
 
   fireEvent.click(getByText("Increment"));

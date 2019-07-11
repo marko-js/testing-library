@@ -26,6 +26,7 @@ function project(displayName, config) {
     transform: {
       "\\.ts$": "ts-jest"
     },
-    coveragePathIgnorePatterns: ["/__tests__/"]
+    coveragePathIgnorePatterns: ["/__tests__/"],
+    transformIgnorePatterns: ["node_modules/(?!(marko)/)"]
   };
 }
