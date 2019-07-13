@@ -1,4 +1,4 @@
-import "jest-dom/extend-expect";
+import "@testing-library/jest-dom/extend-expect";
 import { render, cleanup } from "../index";
 import HelloWorld from "./fixtures/hello-world.marko";
 

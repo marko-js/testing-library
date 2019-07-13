@@ -1,4 +1,4 @@
-import "jest-dom/extend-expect";
+import "@testing-library/jest-dom/extend-expect";
 import { render, fireEvent, wait, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
