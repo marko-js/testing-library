@@ -24,6 +24,7 @@
     "marko": "^4.18.2",
     "marko-widgets": "^7.0.1",
     "prettier": "^1.18.2",
+    "standard-version": "^6.0.1",
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
@@ -50,11 +51,12 @@
   },
   "scripts": {
     "build": "tsc && cp ./src/package.json ./dist/package.json",
-    "prepublishOnly": "npm run build",
     "ci:report": "cat coverage/lcov.info | coveralls",
     "ci:test": "npm run test -- --coverage",
     "format": "prettier \"**/*.{json,md,js,ts}\" --write",
     "lint": "tsc --noEmit && tslint -t codeFrame -c tslint.json '{src,test}/**/*.ts'",
+    "prepublishOnly": "npm run build",
+    "release": "standard-version",
     "test": "jest"
   },
   "types": "dist/index.d.ts"
