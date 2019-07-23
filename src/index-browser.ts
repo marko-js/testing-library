@@ -16,8 +16,10 @@ export async function render<T extends Template>(
   input: Parameters<T["render"]>[0] = {},
   options: RenderOptions = {}
 ) {
+  let isDefaultContainer = false;
   const {
-    container = document.body.appendChild(document.createElement("div"))
+    container = (isDefaultContainer = true) &&
+      document.body.appendChild(document.createElement("div"))
   } = options;
 
   // Doesn't use promise API so that we can support Marko v3
@@ -28,14 +30,14 @@ export async function render<T extends Template>(
   )) as any;
 
   const isV3 = !renderResult.getComponent;
-  const component = renderResult
+  const instance = renderResult
     .appendTo(container)
     [isV3 ? /* istanbul ignore next */ "getWidget" : "getComponent"]();
   const eventRecord: EventRecord = {};
-  mountedComponents.add({ container, component });
+  mountedComponents.add({ container, instance, isDefaultContainer });
 
-  const _emit = component.emit;
-  component.emit = (...args: [string, ...unknown[]]) => {
+  const _emit = instance.emit;
+  instance.emit = (...args: [string, ...unknown[]]) => {
     const [type] = args;
 
     if (!INTERNAL_EVENTS.includes(type as InternalEventNames)) {
@@ -47,7 +49,7 @@ export async function render<T extends Template>(
       (eventRecord[type] || (eventRecord[type] = [])).push(userArgs);
     }
 
-    return _emit.apply(component, args);
+    return _emit.apply(instance, args);
   };
 
   return {
@@ -74,20 +76,20 @@ export async function render<T extends Template>(
       return new Promise(resolve => {
         /* istanbul ignore if  */
         if (isV3) {
-          component.once("render", () => resolve());
+          instance.once("render", () => resolve());
 
           if (newInput) {
-            component.setProps(newInput);
+            instance.setProps(newInput);
           } else {
-            component.setStateDirty("__forceUpdate__");
+            instance.setStateDirty("__forceUpdate__");
           }
         } else {
-          component.once("update", () => resolve());
+          instance.once("update", () => resolve());
 
           if (newInput) {
-            component.input = newInput;
+            instance.input = newInput;
           } else {
-            component.forceUpdate();
+            instance.forceUpdate();
           }
         }
       });
@@ -116,11 +118,13 @@ export type RenderResult = Parameters<
   NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
 >[0];
 
-function destroyComponent({ container, component }) {
-  component.destroy();
+function destroyComponent(component) {
+  const { instance, container, isDefaultContainer } = component;
+
+  instance.destroy();
 
   /* istanbul ignore else  */
-  if (container.parentNode === document.body) {
+  if (isDefaultContainer && container.parentNode === document.body) {
     document.body.removeChild(container);
   }
 
