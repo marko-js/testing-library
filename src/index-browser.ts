@@ -1,15 +1,19 @@
 import { within, prettyDOM } from "@testing-library/dom";
 import {
+  AsyncReturnValue,
   RenderOptions,
   Template,
   EventRecord,
   InternalEventNames,
   INTERNAL_EVENTS
-} from "./types";
-
-export * from "@testing-library/dom";
+} from "./shared";
 
 const mountedComponents = new Set();
+
+export * from "@testing-library/dom";
+export { FireFunction, FireObject, fireEvent } from "./shared";
+
+export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Template>(
   template: T,
@@ -113,10 +117,6 @@ export async function render<T extends Template>(
 export function cleanup() {
   mountedComponents.forEach(destroyComponent);
 }
-
-export type RenderResult = Parameters<
-  NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
->[0];
 
 function destroyComponent(component) {
   const { instance, container, isDefaultContainer } = component;
