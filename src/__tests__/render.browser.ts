@@ -13,18 +13,18 @@ test("renders interactive content in the document", async () => {
   const { getByText } = await render(Counter);
   expect(getByText(/Value: 0/)).toBeInTheDocument();
 
-  fireEvent.click(getByText("Increment"));
+  await fireEvent.click(getByText("Increment"));
 
-  await wait(() => expect(getByText("Value: 1")));
+  expect(getByText("Value: 1")).toBeInTheDocument();
 });
 
 test("renders interactive content in the document with Marko 3", async () => {
   const { getByText } = await render(LegacyCounter);
   expect(getByText(/Value: 0/)).toBeInTheDocument();
 
-  fireEvent.click(getByText("Increment"));
+  await fireEvent.click(getByText("Increment"));
 
-  await wait(() => expect(getByText("Value: 1")));
+  expect(getByText("Value: 1")).toBeInTheDocument();
 });
 
 test("can be rerendered with new input", async () => {
@@ -63,54 +63,56 @@ test("records user events", async () => {
   const { getByText, emitted } = await render(Clickable);
   const button = getByText("Click");
 
-  fireEvent.click(button);
-  fireEvent.click(button);
+  await fireEvent.click(button);
+  await fireEvent.click(button);
 
   expect(emitted("unknown-event")).toHaveProperty("length", 0);
 
   expect(emitted("button-click")).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        Object {
-          "count": 0,
-        },
-      ],
-      Array [
-        Object {
-          "count": 1,
-        },
-      ],
-    ]
-  `);
-
-  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
         Array [
-          "button-click",
-          "button-click",
+          Array [
+            Object {
+              "count": 0,
+            },
+          ],
+          Array [
+            Object {
+              "count": 1,
+            },
+          ],
         ]
     `);
 
-  fireEvent.click(button);
+  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
+            Array [
+              "button-click",
+              "button-click",
+            ]
+      `);
+
+  await fireEvent.click(button);
 
   expect(emitted("button-click")).toMatchInlineSnapshot(`
-    Array [
-      Array [
-        Object {
-          "count": 2,
-        },
-      ],
-    ]
-  `);
-  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
         Array [
-          "button-click",
+          Array [
+            Object {
+              "count": 2,
+            },
+          ],
         ]
     `);
+  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
+            Array [
+              "button-click",
+            ]
+      `);
 });
 
 test("errors when trying to record internal events", async () => {
   const { emitted } = await render(Clickable);
-  expect(() => emitted("mount" as string)).toThrow(/internal events/);
+  expect(() => emitted("mount" as string)).toThrowErrorMatchingInlineSnapshot(
+    `"The emitted helper cannot be used to listen to internal events."`
+  );
 });
 
 test("cleanup removes content from the document", async () => {

@@ -1,13 +1,17 @@
 import { JSDOM } from "jsdom";
 import { within, prettyDOM } from "@testing-library/dom";
 import {
+  AsyncReturnValue,
   RenderOptions,
   Template,
   EventRecord,
   InternalEventNames
-} from "./types";
+} from "./shared";
 
 export * from "@testing-library/dom";
+export { FireFunction, FireObject, fireEvent } from "./shared";
+
+export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Template>(
   template: T,
@@ -31,11 +35,11 @@ export async function render<T extends Template>(
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]> {
-      throw new Error("Component's should not emit events on the server side");
+      throw new Error("Components should not emit events on the server side");
     },
     rerender(newInput?: typeof input): Promise<void> {
       return Promise.reject(
-        new Error("Component's cannot re-render on the server side")
+        new Error("Components cannot re-render on the server side")
       );
     },
     // eslint-disable-next-line no-console
@@ -56,7 +60,3 @@ export async function render<T extends Template>(
 
 /* istanbul ignore next: There is no cleanup for SSR. */
 export function cleanup() {}
-
-export type RenderResult = Parameters<
-  NonNullable<Parameters<ReturnType<typeof render>["then"]>[0]>
->[0];
