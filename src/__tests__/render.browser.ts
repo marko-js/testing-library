@@ -128,3 +128,18 @@ test("can render into a different container", async () => {
   const { getByText } = await render(HelloWorld, null, { container });
   expect(getByText("Hello World")).toHaveProperty("parentNode", container);
 });
+
+test("fireEvent waits for pending updates", async () => {
+  const { getByText } = await render(Counter);
+  expect(getByText(/Value: 0/)).toBeInTheDocument();
+
+  await fireEvent(
+    getByText("Increment"),
+    new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true
+    })
+  );
+
+  expect(getByText("Value: 1")).toBeInTheDocument();
+});
