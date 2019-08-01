@@ -33,10 +33,10 @@ export async function render<T extends Template>(
     )
   )) as any;
 
-  const isV3 = !renderResult.getComponent;
+  const isV4 = renderResult.getComponent;
   const instance = renderResult
     .appendTo(container)
-    [isV3 ? /* istanbul ignore next */ "getWidget" : "getComponent"]();
+    [isV4 ? "getComponent" : /* istanbul ignore next */ "getWidget"]();
   const eventRecord: EventRecord = {};
   mountedComponents.add({ container, instance, isDefaultContainer });
 
@@ -78,22 +78,23 @@ export async function render<T extends Template>(
     },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise(resolve => {
-        /* istanbul ignore if  */
-        if (isV3) {
-          instance.once("render", () => resolve());
+        instance.once(
+          isV4 ? "update" : /* istanbul ignore next */ "render",
+          () => resolve()
+        );
 
-          if (newInput) {
+        if (newInput) {
+          if (instance.setProps) {
             instance.setProps(newInput);
           } else {
-            instance.setStateDirty("__forceUpdate__");
+            instance.input = newInput;
           }
         } else {
-          instance.once("update", () => resolve());
-
-          if (newInput) {
-            instance.input = newInput;
-          } else {
+          /* istanbul ignore else */
+          if (instance.forceUpdate) {
             instance.forceUpdate();
+          } else {
+            instance.setStateDirty("__forceUpdate__");
           }
         }
       });
