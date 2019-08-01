@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/marko-js/testing-library/compare/v2.0.0...v2.0.1) (2019-08-01)
+
+
+### Bug Fixes
+
+* rerender legacy compatibility components ([ad3f90b](https://github.com/marko-js/testing-library/commit/ad3f90b))
+
+
+
 ## [2.0.0](https://github.com/marko-js/testing-library/compare/v1.1.2...v2.0.0) (2019-07-30)
 
 
