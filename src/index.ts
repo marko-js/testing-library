@@ -27,7 +27,12 @@ export async function render<T extends Template>(
       )
     )
   );
+
+  const {
+    window: { document }
+  } = new JSDOM();
   const container = JSDOM.fragment(html);
+  document.adoptNode(container);
   (container as any).outerHTML = html; // Fixes prettyDOM for container
 
   return {

@@ -45,6 +45,7 @@ export type FireObject = {
 };
 
 export const fireEvent = (async (...params) => {
+  failIfNoWindow();
   originalFireEvent(...params);
   await wait();
 }) as FireFunction & FireObject;
@@ -52,6 +53,7 @@ export const fireEvent = (async (...params) => {
 Object.keys(originalFireEvent).forEach((eventName: EventType) => {
   const fire = originalFireEvent[eventName];
   fireEvent[eventName] = async (...params) => {
+    failIfNoWindow();
     fire(...params);
 
     // TODO: this waits for a possible update using setTimeout(0) which should
@@ -66,3 +68,11 @@ export type AsyncReturnValue<
 > = Parameters<
   NonNullable<Parameters<ReturnType<AsyncFunction>["then"]>[0]>
 >[0];
+
+function failIfNoWindow() {
+  if (typeof window === "undefined") {
+    throw new Error(
+      "Cannot fire events when testing on the server side. Please use @marko/testing-library in a browser environment."
+    );
+  }
+}
