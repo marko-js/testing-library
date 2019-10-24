@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/marko-js/testing-library/compare/v2.1.0...v3.0.0) (2019-10-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* @testing-library/dom has been upgraded, see https://github.com/testing-library/dom-testing-library/releases/tag/v6.0.0
+
+### Bug Fixes
+
+* allow Marko 3 as a peerDep and upgrade testing library deps ([a6e0156](https://github.com/marko-js/testing-library/commit/a6e0156b71d69be2e95e5afb4f477ac6da03a4f0))
+
 ## [2.1.0](https://github.com/marko-js/testing-library/compare/v2.0.1...v2.1.0) (2019-10-11)
 
 
