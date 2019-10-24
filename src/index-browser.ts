@@ -84,6 +84,7 @@ export async function render<T extends Template>(
         );
 
         if (newInput) {
+          /* istanbul ignore else */
           if (instance.setProps) {
             instance.setProps(newInput);
           } else {
