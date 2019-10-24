@@ -5,30 +5,30 @@
   "author": "Dylan Piercey <dpiercey@ebay.com>",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
-    "@testing-library/dom": "^5.4.0",
-    "jsdom": "^15.1.1",
+    "@testing-library/dom": "^6.8.1",
+    "jsdom": "^15.2.0",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-conventional": "^8.0.0",
-    "@marko/jest": "^1.0.3",
-    "@testing-library/jest-dom": "^4.0.0",
-    "@types/jest": "^24.0.15",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@marko/jest": "^2.0.1",
+    "@testing-library/jest-dom": "^4.1.2",
+    "@types/jest": "^24.0.19",
     "@types/jsdom": "^12.2.4",
-    "@types/node": "^12.6.2",
-    "coveralls": "^3.0.5",
-    "husky": "^3.0.0",
-    "jest": "^24.8.0",
-    "lint-staged": "^9.2.0",
+    "@types/node": "^12.11.7",
+    "coveralls": "^3.0.7",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.4.2",
     "marko": "^4.18.2",
     "marko-widgets": "^7.0.1",
     "prettier": "^1.18.2",
-    "standard-version": "^6.0.1",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0",
+    "standard-version": "^7.0.0",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.4"
   },
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   "license": "MIT",
   "main": "index.js",
   "peerDependencies": {
-    "marko": "^4"
+    "marko": "^3 || ^4"
   },
   "repository": {
     "type": "git",
