@@ -6,6 +6,7 @@ import UpdateCounter from "./fixtures/update-counter.marko";
 import HelloWorld from "./fixtures/hello-world.marko";
 import HelloName from "./fixtures/hello-name.marko";
 import Clickable from "./fixtures/clickable.marko";
+import ScopedId from "./fixtures/scoped-id.marko";
 
 afterEach(cleanup);
 
@@ -142,4 +143,12 @@ test("fireEvent waits for pending updates", async () => {
   );
 
   expect(getByText("Value: 1")).toBeInTheDocument();
+});
+
+test("it renders a stable scoped id", async () => {
+  const r1 = await render(ScopedId);
+  expect(r1.getByRole("main")).toHaveProperty("id", "c0-test");
+  cleanup();
+  const r2 = await render(ScopedId);
+  expect(r2.getByRole("main")).toHaveProperty("id", "c0-test");
 });
