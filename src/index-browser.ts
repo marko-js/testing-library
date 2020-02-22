@@ -136,6 +136,7 @@ function destroyComponent(component) {
 
 function resetComponentIdCounter() {
   const counter = (window as any).$MUID;
+  /* istanbul ignore else */
   if (counter) {
     counter.i = 0;
   }
