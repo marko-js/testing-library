@@ -118,6 +118,7 @@ export async function render<T extends Template>(
 
 export function cleanup() {
   mountedComponents.forEach(destroyComponent);
+  resetComponentIdCounter();
 }
 
 function destroyComponent(component) {
@@ -131,4 +132,12 @@ function destroyComponent(component) {
   }
 
   mountedComponents.delete(container);
+}
+
+function resetComponentIdCounter() {
+  const counter = (window as any).$MUID;
+  /* istanbul ignore else */
+  if (counter) {
+    counter.i = 0;
+  }
 }
