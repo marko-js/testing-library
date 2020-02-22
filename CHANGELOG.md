@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/marko-js/testing-library/compare/v3.0.0...v3.0.1) (2020-02-22)
+
+
+### Bug Fixes
+
+* reset id counter on cleanup ([#5](https://github.com/marko-js/testing-library/issues/5)) ([335ab49](https://github.com/marko-js/testing-library/commit/335ab49))
+
+
+
 ## [3.0.0](https://github.com/marko-js/testing-library/compare/v2.1.0...v3.0.0) (2019-10-24)
 
 
