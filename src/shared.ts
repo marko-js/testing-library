@@ -36,30 +36,32 @@ export type InternalEventNames = typeof INTERNAL_EVENTS[number];
 
 export type FireFunction = (
   ...params: Parameters<originalFireFunction>
-) => Promise<void>;
+) => Promise<ReturnType<originalFireFunction>>;
 
 export type FireObject = {
   [K in EventType]: (
     ...params: Parameters<originalFireObject[keyof originalFireObject]>
-  ) => Promise<void>;
+  ) => Promise<ReturnType<originalFireFunction>>;
 };
 
 export const fireEvent = (async (...params) => {
   failIfNoWindow();
-  originalFireEvent(...params);
+  const result = originalFireEvent(...params);
   await wait();
+  return result;
 }) as FireFunction & FireObject;
 
 Object.keys(originalFireEvent).forEach((eventName: EventType) => {
   const fire = originalFireEvent[eventName];
   fireEvent[eventName] = async (...params) => {
     failIfNoWindow();
-    fire(...params);
+    const result = fire(...params);
 
     // TODO: this waits for a possible update using setTimeout(0) which should
     // be sufficient, but ideally we would hook into the Marko lifecycle to
     // determine when all pending updates are complete.
     await wait();
+    return result;
   };
 });
 
