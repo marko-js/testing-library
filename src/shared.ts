@@ -1,6 +1,5 @@
 import {
   fireEvent as originalFireEvent,
-  wait,
   EventType,
   FireFunction as originalFireFunction,
   FireObject as originalFireObject
@@ -47,7 +46,7 @@ export type FireObject = {
 export const fireEvent = (async (...params) => {
   failIfNoWindow();
   const result = originalFireEvent(...params);
-  await wait();
+  await waitForBatchedUpdates();
   return result;
 }) as FireFunction & FireObject;
 
@@ -57,10 +56,7 @@ Object.keys(originalFireEvent).forEach((eventName: EventType) => {
     failIfNoWindow();
     const result = fire(...params);
 
-    // TODO: this waits for a possible update using setTimeout(0) which should
-    // be sufficient, but ideally we would hook into the Marko lifecycle to
-    // determine when all pending updates are complete.
-    await wait();
+    await waitForBatchedUpdates();
     return result;
   };
 });
@@ -77,4 +73,11 @@ function failIfNoWindow() {
       "Cannot fire events when testing on the server side. Please use @marko/testing-library in a browser environment."
     );
   }
+}
+
+function waitForBatchedUpdates() {
+  // TODO: this waits for a possible update using setTimeout(0) which should
+  // be sufficient, but ideally we would hook into the Marko lifecycle to
+  // determine when all pending updates are complete.
+  return new Promise(resolve => setTimeout(resolve, 0));
 }
