@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/marko-js/testing-library/compare/v4.0.0...v4.0.1) (2020-04-20)
+
+
+### Bug Fixes
+
+* prevent race conditions when waiting for updates from fireEvent ([92fd78f](https://github.com/marko-js/testing-library/commit/92fd78fd7829c5fcb1dcde31e9fd82deff5de751))
+
 ## [4.0.0](https://github.com/marko-js/testing-library/compare/v3.0.2...v4.0.0) (2020-04-13)
 
 
