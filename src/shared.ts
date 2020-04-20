@@ -2,7 +2,7 @@ import {
   fireEvent as originalFireEvent,
   EventType,
   FireFunction as originalFireFunction,
-  FireObject as originalFireObject
+  FireObject as originalFireObject,
 } from "@testing-library/dom";
 
 export interface EventRecord {
@@ -28,7 +28,7 @@ export const INTERNAL_EVENTS = [
   "render",
   "mount",
   "update",
-  "destroy"
+  "destroy",
 ] as const;
 
 export type InternalEventNames = typeof INTERNAL_EVENTS[number];
@@ -75,9 +75,7 @@ function failIfNoWindow() {
   }
 }
 
+const setImmediate = global.setImmediate || setTimeout;
 function waitForBatchedUpdates() {
-  // TODO: this waits for a possible update using setTimeout(0) which should
-  // be sufficient, but ideally we would hook into the Marko lifecycle to
-  // determine when all pending updates are complete.
-  return new Promise(resolve => setTimeout(resolve, 0));
+  return new Promise((resolve) => setImmediate(() => setImmediate(resolve)));
 }
