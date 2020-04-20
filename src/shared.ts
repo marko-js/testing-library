@@ -75,6 +75,7 @@ function failIfNoWindow() {
   }
 }
 
+/* istanbul ignore next: We don't care about coverage for the fallback. */
 const setImmediate = global.setImmediate || setTimeout;
 function waitForBatchedUpdates() {
   return new Promise((resolve) => setImmediate(() => setImmediate(resolve)));
