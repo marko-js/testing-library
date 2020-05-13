@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](https://github.com/marko-js/testing-library/compare/v4.0.1...v4.0.2) (2020-05-13)
+
+
+### Bug Fixes
+
+* ignore coverage for batched uupdate fallback ([68d1756](https://github.com/marko-js/testing-library/commit/68d1756eaa20f8ded99b9a6afc65a82f09ee164a))
+* regression caused by tslib update ([0c740ea](https://github.com/marko-js/testing-library/commit/0c740eaa4794d9ef31f580acf295108fdcb4ceb3))
+
 ### [4.0.1](https://github.com/marko-js/testing-library/compare/v4.0.0...v4.0.1) (2020-04-20)
 
 
