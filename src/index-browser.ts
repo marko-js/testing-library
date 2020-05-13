@@ -5,12 +5,11 @@ import {
   Template,
   EventRecord,
   InternalEventNames,
-  INTERNAL_EVENTS
+  INTERNAL_EVENTS,
 } from "./shared";
 
 const mountedComponents = new Set();
 
-export * from "@testing-library/dom";
 export { FireFunction, FireObject, fireEvent } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
@@ -23,7 +22,7 @@ export async function render<T extends Template>(
   let isDefaultContainer = false;
   const {
     container = (isDefaultContainer = true) &&
-      document.body.appendChild(document.createElement("div"))
+      document.body.appendChild(document.createElement("div")),
   } = options;
 
   // Doesn't use promise API so that we can support Marko v3
@@ -48,7 +47,7 @@ export async function render<T extends Template>(
       const userArgs = args.slice(1);
       (eventRecord["*"] || (eventRecord["*"] = [])).push({
         type,
-        args: userArgs
+        args: userArgs,
       });
       (eventRecord[type] || (eventRecord[type] = [])).push(userArgs);
     }
@@ -77,7 +76,7 @@ export async function render<T extends Template>(
       return copy as NonNullable<EventRecord[N]>;
     },
     rerender(newInput?: typeof input): Promise<void> {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         instance.once(
           isV4 ? "update" : /* istanbul ignore next */ "render",
           () => resolve()
@@ -112,7 +111,7 @@ export async function render<T extends Template>(
         );
       }
     },
-    ...within((container as any) as HTMLElement)
+    ...within((container as any) as HTMLElement),
   } as const;
 }
 
@@ -141,3 +140,5 @@ function resetComponentIdCounter() {
     counter.i = 0;
   }
 }
+
+export * from "@testing-library/dom";

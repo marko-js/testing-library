@@ -5,31 +5,30 @@ import {
   RenderOptions,
   Template,
   EventRecord,
-  InternalEventNames
+  InternalEventNames,
 } from "./shared";
 
-export * from "@testing-library/dom";
 export { FireFunction, FireObject, fireEvent } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Template>(
   template: T,
-  input: Parameters<T["renderToString"]>[0] = {},
+  input: Parameters<NonNullable<T["renderToString"]>>[0] = {},
   options?: RenderOptions
 ) {
   // Doesn't use promise API so that we can support Marko v3
   const renderMethod = template.renderToString ? "renderToString" : "render";
   const html = String(
     await new Promise((resolve, reject) =>
-      template[renderMethod](input, (err, result) =>
+      template[renderMethod]!(input, (err, result) =>
         err ? /* istanbul ignore next */ reject(err) : resolve(result)
       )
     )
   );
 
   const {
-    window: { document }
+    window: { document },
   } = new JSDOM();
   const container = JSDOM.fragment(html);
   document.adoptNode(container);
@@ -59,9 +58,11 @@ export async function render<T extends Template>(
         );
       }
     },
-    ...within((container as any) as HTMLElement)
+    ...within((container as any) as HTMLElement),
   } as const;
 }
 
 /* istanbul ignore next: There is no cleanup for SSR. */
 export function cleanup() {}
+
+export * from "@testing-library/dom";

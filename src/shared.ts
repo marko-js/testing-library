@@ -15,7 +15,7 @@ export interface RenderOptions {
 }
 
 export interface Template {
-  renderToString(
+  renderToString?(
     input: unknown,
     cb: (err: Error | null, result: any) => void
   ): any;
