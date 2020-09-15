@@ -90,7 +90,7 @@ import HelloTemplate from "./src/__test__/fixtures/hello-name.marko";
 
 test("contains the text", async () => {
   const { getByText, rerender } = await render(HelloTemplate, {
-    name: "World"
+    name: "World",
   });
 
   // Will find the element within the rendered result from the template.
@@ -146,27 +146,23 @@ Below is some example configurations to test both server and browser components 
 
 For Jest to understand Marko templates you must first [install the @marko/jest preset](https://github.com/marko-js/jest#installation). This allows your Marko templates to be imported into your tests.
 
-In Jest there is a [browser option](https://jestjs.io/docs/en/configuration#browser-boolean) which will tell Jest to resolve the [browser shim](https://github.com/defunctzombie/package-browser-field-spec) version of all modules as mentioned above.
-
-To test components rendered in the client side, be sure to enable both the `browser` option and the preset and you are good to go!
+To test components rendered in the client side, be sure to use the `@marko/jest/preset/browser` jest preset and you are good to go!
 
 **jest.config.js**
 
 ```javascript
 module.exports = {
-  preset: "@marko/jest",
-  browser: true // Tells Jest to resolve browser shims.
+  preset: "@marko/jest/preset/browser",
 };
 ```
 
-For testing components rendered server side we can omit the `browser` option, however ideally you should also set the [`testEnvironment option`](https://jestjs.io/docs/en/configuration#testenvironment-string) to `node` which will disable loading JSDOM globally.
+If you'd like to test components using server side rendering you can instead use the `@marko/jest/preset/node` jest preset.
 
 **jest.config.js**
 
 ```javascript
 module.exports = {
-  preset: "@marko/jest",
-  testEnvironment: "node" // Tells Jest not to load a global JSDOM for server side.
+  preset: "@marko/jest/preset/node",
 };
 ```
 
@@ -179,17 +175,15 @@ module.exports = {
   projects: [
     {
       displayName: "server",
-      testEnvironment: "node",
-      preset: "@marko/jest",
-      testRegex: "/__tests__/[^.]+\\.server\\.js$"
+      preset: "@marko/jest/preset/node",
+      testRegex: "/__tests__/[^.]+\\.server\\.js$",
     },
     {
       displayName: "browser",
-      preset: "@marko/jest",
-      browser: true,
-      testRegex: "/__tests__/[^.]+\\.browser\\.js$"
-    }
-  ]
+      preset: "@marko/jest/preset/browser",
+      testRegex: "/__tests__/[^.]+\\.browser\\.js$",
+    },
+  ],
 };
 ```
 
