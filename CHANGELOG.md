@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/marko-js/testing-library/compare/v4.0.3...v4.1.0) (2021-04-06)
+
+
+### Features
+
+* better support @testing-library/jest-dom for ssr tests ([333d860](https://github.com/marko-js/testing-library/commit/333d860b13fed9049302ba4ba5da8fb0852f44dd))
+
 ### [4.0.3](https://github.com/marko-js/testing-library/compare/v4.0.2...v4.0.3) (2020-07-30)
 
 ### [4.0.2](https://github.com/marko-js/testing-library/compare/v4.0.1...v4.0.2) (2020-05-13)
