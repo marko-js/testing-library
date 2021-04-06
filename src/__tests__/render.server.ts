@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom/extend-expect";
 import { render, fireEvent } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
@@ -5,13 +6,15 @@ import Clickable from "./fixtures/clickable.marko";
 import HelloName from "./fixtures/hello-name.marko";
 
 test("renders static content in a document with a browser context", async () => {
-  const { getByText } = await render(Counter);
+  const { getByText, container } = await render(Counter);
   expect(
     expect(getByText("Value: 0")).toHaveProperty([
       "ownerDocument",
-      "defaultView"
+      "defaultView",
     ])
   ).not.toBeNull();
+
+  expect(container.firstElementChild).toHaveAttribute("class", "counter");
 });
 
 test("renders static content from a Marko 3 component", async () => {
@@ -19,7 +22,7 @@ test("renders static content from a Marko 3 component", async () => {
   expect(
     expect(getByText("Value: 0")).toHaveProperty([
       "ownerDocument",
-      "defaultView"
+      "defaultView",
     ])
   ).not.toBeNull();
 });

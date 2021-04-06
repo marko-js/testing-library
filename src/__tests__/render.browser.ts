@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, fireEvent, wait, cleanup } from "..";
+import { render, fireEvent, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import UpdateCounter from "./fixtures/update-counter.marko";
@@ -138,7 +138,7 @@ test("fireEvent waits for pending updates", async () => {
     getByText("Increment"),
     new MouseEvent("click", {
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     })
   );
 
