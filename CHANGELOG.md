@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.1](https://github.com/marko-js/testing-library/compare/v5.0.0...v5.0.1) (2021-06-02)
+
+
+### Bug Fixes
+
+* don't publish tsbuildinfo ([0562beb](https://github.com/marko-js/testing-library/commit/0562beb17ec20cd1fe9442efe17dc84c11e734f5))
+
 ## [5.0.0](https://github.com/marko-js/testing-library/compare/v4.1.0...v5.0.0) (2021-06-02)
 
 

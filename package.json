@@ -1,7 +1,7 @@
 {
   "name": "@marko/testing-library",
   "description": "Simple and complete Marko testing utilities that encourage good testing practices.",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "author": "Dylan Piercey <dpiercey@ebay.com>",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
