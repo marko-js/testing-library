@@ -42,14 +42,14 @@
     "!*.tsbuildinfo"
   ],
   "homepage": "https://github.com/marko-js/testing-library",
-  "jsnext": "dist/esm/index.js",
+  "jsnext": "dist/esm",
   "keywords": [
     "marko",
     "testing-library"
   ],
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs",
+  "module": "dist/esm",
   "peerDependencies": {
     "marko": "^3 || ^4 || ^5"
   },
