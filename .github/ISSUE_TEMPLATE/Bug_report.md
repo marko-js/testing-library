@@ -5,7 +5,7 @@ about: Something isn't working right
 
 ## Version: x.x.x
 
-<!--- Provide the exact version in which you see the bug.  You can run `npm ls @marko/jest` to see this. -->
+<!--- Provide the exact version in which you see the bug.  You can run `npm ls @marko/testing-library` to see this. -->
 
 ### Details
 

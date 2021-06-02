@@ -6,42 +6,49 @@
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
     "@testing-library/dom": "^7",
-    "jsdom": "^16",
-    "tslib": "^2"
+    "jsdom": "^16"
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.1.1",
-    "@commitlint/config-conventional": "^9.1.1",
-    "@marko/jest": "^3.2.0",
-    "@testing-library/jest-dom": "^5.11.2",
-    "@types/jest": "^26.0.7",
-    "@types/jsdom": "^16.2.3",
-    "@types/node": "^14.0.27",
-    "coveralls": "^3.1.0",
-    "husky": "^4.2.5",
-    "jest": "^26.2.1",
-    "lint-staged": "^10.2.11",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@marko/jest": "^4.0.0",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@types/jest": "^26.0.23",
+    "@types/jsdom": "^16.2.10",
+    "@types/node": "^15.6.2",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "codecov": "^3.8.2",
+    "esbuild": "^0.12.5",
+    "esbuild-jest": "^0.5.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "fixpack": "^4.0.0",
+    "husky": "^6.0.0",
+    "jest": "^27.0.3",
+    "lint-staged": "^11.0.0",
     "marko": "^4.18.2",
     "marko-widgets": "^7.0.1",
-    "prettier": "^2.0.5",
-    "standard-version": "^8.0.2",
-    "ts-jest": "^26.1.4",
-    "tslint": "^6.1.2",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.7"
+    "prettier": "^2.3.0",
+    "standard-version": "^9.3.0",
+    "typescript": "^4.3.2"
   },
   "files": [
     "dist",
-    "index.js",
-    "cleanup-after-each.js"
+    "dont-cleanup-after-each",
+    "!**/__tests__"
   ],
   "homepage": "https://github.com/marko-js/testing-library",
+  "jsnext": "dist/esm/index.js",
   "keywords": [
     "marko",
     "testing-library"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "peerDependencies": {
     "marko": "^3 || ^4 || ^5"
   },
@@ -50,14 +57,19 @@
     "url": "https://github.com/marko-js/testing-library"
   },
   "scripts": {
-    "build": "tsc && cp ./src/package.json ./dist/package.json",
-    "ci:report": "cat coverage/lcov.info | coveralls",
-    "ci:test": "npm run test -- --coverage",
-    "format": "prettier \"**/*.{json,md,js,ts}\" --write",
-    "lint": "tsc --noEmit && tslint -t codeFrame -c tslint.json '{src,test}/**/*.ts'",
+    "build": "node build.js && tsc",
+    "ci:report": "codecov",
+    "ci:test": "jest --ci --coverage",
+    "format": "npm run lint:eslint -- --fix && npm run lint:prettier -- --write && (fixpack || true)",
+    "lint": "tsc && npm run lint:eslint && npm run lint:prettier -- -l && fixpack",
+    "lint:eslint": "eslint -f visualstudio .",
+    "lint:prettier": "prettier '**/*{.ts,.js,.json,.md,.yml,rc}'",
+    "prepare": "husky install",
     "prepublishOnly": "npm run build",
     "release": "standard-version",
-    "test": "jest"
+    "report": "open ./coverage/lcov-report/index.html",
+    "test": "jest --watch",
+    "test:inspect": "node --inspect=0.0.0.0 $(which jest) --watch --runInBand --testTimeout 99999999"
   },
   "types": "dist/index.d.ts"
 }

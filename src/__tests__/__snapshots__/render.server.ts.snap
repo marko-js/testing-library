@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`local cleanup removes single component from the document 1`] = `"Component was already destroyed before cleanup called."`;

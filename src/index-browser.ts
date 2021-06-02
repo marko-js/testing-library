@@ -1,24 +1,34 @@
-import { within, prettyDOM } from "@testing-library/dom";
-import {
-  AsyncReturnValue,
+import type { OptionsReceived } from "pretty-format";
+import type {
   RenderOptions,
   Template,
   EventRecord,
   InternalEventNames,
-  INTERNAL_EVENTS,
+  AsyncReturnValue,
 } from "./shared";
+import { within, logDOM } from "@testing-library/dom";
+import { autoCleanupEnabled, INTERNAL_EVENTS } from "./shared";
 
-const mountedComponents = new Set();
+interface MountedComponent {
+  container: Element | DocumentFragment;
+  instance: any;
+  isDefaultContainer: boolean;
+}
+const mountedComponents = new Set<MountedComponent>();
 
 export { FireFunction, FireObject, fireEvent } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Template>(
-  template: T,
+  template: T | { default: T },
   input: Parameters<T["render"]>[0] = {},
   options: RenderOptions = {}
 ) {
+  if (template && "default" in template) {
+    template = template.default;
+  }
+
   let isDefaultContainer = false;
   const {
     container = (isDefaultContainer = true) &&
@@ -27,17 +37,22 @@ export async function render<T extends Template>(
 
   // Doesn't use promise API so that we can support Marko v3
   const renderResult = (await new Promise((resolve, reject) =>
-    template.render(input, (err, result) =>
-      err ? /* istanbul ignore next */ reject(err) : resolve(result)
+    (template as T).render(input, (err, result) =>
+      err ? reject(err) : resolve(result)
     )
   )) as any;
 
   const isV4 = renderResult.getComponent;
   const instance = renderResult
     .appendTo(container)
-    [isV4 ? "getComponent" : /* istanbul ignore next */ "getWidget"]();
+    [isV4 ? "getComponent" : "getWidget"]();
   const eventRecord: EventRecord = {};
-  mountedComponents.add({ container, instance, isDefaultContainer });
+  const mountedComponent: MountedComponent = {
+    container,
+    instance,
+    isDefaultContainer,
+  };
+  mountedComponents.add(mountedComponent);
 
   const _emit = instance.emit;
   instance.emit = (...args: [string, ...unknown[]]) => {
@@ -77,20 +92,15 @@ export async function render<T extends Template>(
     },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise((resolve) => {
-        instance.once(
-          isV4 ? "update" : /* istanbul ignore next */ "render",
-          () => resolve()
-        );
+        instance.once(isV4 ? "update" : "render", () => resolve());
 
         if (newInput) {
-          /* istanbul ignore else */
           if (instance.setProps) {
             instance.setProps(newInput);
           } else {
             instance.input = newInput;
           }
         } else {
-          /* istanbul ignore else */
           if (instance.forceUpdate) {
             instance.forceUpdate();
           } else {
@@ -99,46 +109,56 @@ export async function render<T extends Template>(
         }
       });
     },
-    // eslint-disable-next-line no-console
-    debug(el?: ParentNode) {
-      if (el) {
-        console.log(prettyDOM(el as HTMLElement));
-      } else {
-        console.log(
-          ...[].map.call(container.children, (child: HTMLElement) =>
-            prettyDOM(child)
-          )
+    cleanup() {
+      if (!mountedComponents.has(mountedComponent)) {
+        throw new Error(
+          "Component was already destroyed before cleanup called."
         );
       }
+      cleanupComponent(mountedComponent);
     },
-    ...within((container as any) as HTMLElement),
+    debug: function debug(
+      element?: Element | HTMLDocument | (Element | HTMLDocument)[] | undefined,
+      maxLength?: number,
+      options?: OptionsReceived
+    ) {
+      if (!element) {
+        debug(Array.from(container.children), maxLength, options);
+      } else if (Array.isArray(element)) {
+        for (const child of element) {
+          logDOM(child, maxLength, options);
+        }
+      } else {
+        logDOM(element, maxLength, options);
+      }
+    },
+    ...within(container as any as HTMLElement),
   } as const;
 }
 
 export function cleanup() {
-  mountedComponents.forEach(destroyComponent);
-  resetComponentIdCounter();
-}
+  mountedComponents.forEach(cleanupComponent);
 
-function destroyComponent(component) {
-  const { instance, container, isDefaultContainer } = component;
-
-  instance.destroy();
-
-  /* istanbul ignore else  */
-  if (isDefaultContainer && container.parentNode === document.body) {
-    document.body.removeChild(container);
-  }
-
-  mountedComponents.delete(container);
-}
-
-function resetComponentIdCounter() {
+  // reset internal Marko component id count
   const counter = (window as any).$MUID;
-  /* istanbul ignore else */
   if (counter) {
     counter.i = 0;
   }
 }
 
+function cleanupComponent(mountedComponent: MountedComponent) {
+  const { instance, container, isDefaultContainer } = mountedComponent;
+  instance.destroy();
+
+  if (isDefaultContainer && container.parentNode === document.body) {
+    document.body.removeChild(container);
+  }
+
+  mountedComponents.delete(mountedComponent);
+}
+
 export * from "@testing-library/dom";
+
+if (autoCleanupEnabled && typeof afterEach === "function") {
+  afterEach(cleanup);
+}

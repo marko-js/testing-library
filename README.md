@@ -17,8 +17,8 @@
   <img src="https://img.shields.io/travis/marko-js/testing-library.svg" alt="Build status"/>
   </a>
   <!-- Coverage -->
-  <a href="https://coveralls.io/github/marko-js/testing-library">
-    <img src="https://img.shields.io/coveralls/marko-js/testing-library.svg" alt="Test Coverage"/>
+  <a href="https://codecov.io/gh/marko-js/testing-library">
+    <img src="https://codecov.io/gh/marko-js/testing-library/branch/master/graph/badge.svg?token=LirxYQjltb" alt="Test Coverage"/>
   </a>
   <!-- Language -->
   <a href="http://typescriptlang.org">
@@ -85,21 +85,21 @@ Marko testing library exposes all of the same utilities for [querying the dom](h
 This funcition renders your template asynchronously and provides you with [query helpers](https://testing-library.com/docs/dom-testing-library/api-queries) that are scoped to output DOM.
 
 ```javascript
-import { render } from "@marko/testing-library";
+import { render, screen } from "@marko/testing-library";
 import HelloTemplate from "./src/__test__/fixtures/hello-name.marko";
 
 test("contains the text", async () => {
-  const { getByText, rerender } = await render(HelloTemplate, {
+  const { rerender } = await render(HelloTemplate, {
     name: "World",
   });
 
   // Will find the element within the rendered result from the template.
-  expect(getByText("Hello World")).toBeInTheDocument();
+  expect(screen.getByText("Hello World")).toBeInTheDocument();
 
   // You can also rerender the component if needed.
   await rerender({ name: "Marko" });
 
-  expect(getByText("Hello Marko")).toBeInTheDocument();
+  expect(screen.getByText("Hello Marko")).toBeInTheDocument();
 });
 ```
 
@@ -118,21 +118,34 @@ The problem with the above test is that your user does not care about or see tha
 ### `cleanup()`
 
 With client side tests your components are rendered into a placeholder HTMLElement.
-To ensure that your components are properly removed, and destroyed, you can call `cleanup` at any time which will remove any attached components.
+You can call `cleanup` at any time to destroy any attached components and remove them from the DOM.
 
 ```javascript
-import { cleanup } from "@marko/testing-library";
-// automatically unmount and cleanup DOM after the test is finished.
-afterEach(cleanup);
+import { cleanup, screen } from "@marko/testing-library";
+import HelloTemplate from "./src/__test__/fixtures/hello-name.marko";
+
+test("contains the text", async () => {
+  await render(HelloTemplate, { name: "World" });
+
+  expect(screen.getByText("Hello World")).toBeInTheDocument();
+
+  cleanup();
+
+  expect(screen.queryByText("Hello Marko")).toBeNull();
+});
 ```
 
-To save some typing, you could also import a file with the above.
+By default if your testing framework exposes an `afterEach` hook (such as `jest` and `mocha`) then `cleanup` will be automatically invoked after each of your tests run.
+
+If you'd like to disable the automatic cleanup behavior described above you can import `@marko/testing-library/dont-cleanup-after-each`.
 
 ```javascript
-import "@marko/testing-library/cleanup-after-each";
+import "@marko/testing-library/dont-cleanup-after-each";
 ```
 
-If you are using Jest, you can simply include `setupFilesAfterEnv: ["@marko/testing-library/cleanup-after-each"]` to your Jest config to avoid doing this in each file.
+With mocha you can use `mocha -r @marko/testing-library/dont-cleanup-after-each` as a shorthand.
+
+If you are using Jest, you can include `setupFilesAfterEnv: ["@marko/testing-library/dont-cleanup-after-each"]` in your Jest config to avoid doing this in each file.
 
 ## Setup
 

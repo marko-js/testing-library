@@ -1,6 +1,6 @@
+import type { EventType } from "@testing-library/dom";
 import {
   fireEvent as originalFireEvent,
-  EventType,
   FireFunction as originalFireFunction,
   FireObject as originalFireObject,
 } from "@testing-library/dom";
@@ -20,6 +20,11 @@ export interface Template {
     cb: (err: Error | null, result: any) => void
   ): any;
   render(input: unknown, cb: (err: Error | null, result: any) => void): any;
+}
+
+export let autoCleanupEnabled = true;
+export function disableAutoCleanup() {
+  autoCleanupEnabled = false;
 }
 
 export const INTERNAL_EVENTS = [
@@ -50,16 +55,18 @@ export const fireEvent = (async (...params) => {
   return result;
 }) as FireFunction & FireObject;
 
-Object.keys(originalFireEvent).forEach((eventName: EventType) => {
-  const fire = originalFireEvent[eventName];
-  fireEvent[eventName] = async (...params) => {
-    failIfNoWindow();
-    const result = fire(...params);
+(Object.keys(originalFireEvent) as EventType[]).forEach(
+  (eventName: EventType) => {
+    const fire = originalFireEvent[eventName];
+    fireEvent[eventName] = async (...params) => {
+      failIfNoWindow();
+      const result = fire(...params);
 
-    await waitForBatchedUpdates();
-    return result;
-  };
-});
+      await waitForBatchedUpdates();
+      return result;
+    };
+  }
+);
 
 export type AsyncReturnValue<
   AsyncFunction extends (...args: any) => Promise<any>
@@ -75,7 +82,6 @@ function failIfNoWindow() {
   }
 }
 
-/* istanbul ignore next: We don't care about coverage for the fallback. */
 const setImmediate = global.setImmediate || setTimeout;
 function waitForBatchedUpdates() {
   return new Promise((resolve) => setImmediate(() => setImmediate(resolve)));
