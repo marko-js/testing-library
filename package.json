@@ -38,7 +38,8 @@
   "files": [
     "dist",
     "dont-cleanup-after-each",
-    "!**/__tests__"
+    "!**/__tests__",
+    "!*.tsbuildinfo"
   ],
   "homepage": "https://github.com/marko-js/testing-library",
   "jsnext": "dist/esm/index.js",
