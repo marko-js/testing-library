@@ -6,5 +6,5 @@ module.exports = require("marko-widgets").defineComponent({
 
   increment() {
     this.setState("count", this.state.count + 1);
-  }
+  },
 });

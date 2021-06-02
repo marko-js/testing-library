@@ -1,5 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
-import { render, fireEvent } from "..";
+import { render, screen, fireEvent, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import Clickable from "./fixtures/clickable.marko";
@@ -25,6 +24,21 @@ test("renders static content from a Marko 3 component", async () => {
       "defaultView",
     ])
   ).not.toBeNull();
+});
+
+test("global cleanup removes content from the document", async () => {
+  await render(Counter);
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(1);
+  cleanup();
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(0);
+});
+
+test("local cleanup removes single component from the document", async () => {
+  const { cleanup } = await render(Counter);
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(1);
+  cleanup();
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(0);
+  expect(() => cleanup()).toThrowErrorMatchingSnapshot();
 });
 
 test("fails when rerendering", async () => {

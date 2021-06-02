@@ -1,19 +1,22 @@
 {
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "lib": ["dom", "es2015", "scripthost"],
-    "pretty": true,
-    "target": "es5",
-    "outDir": "./dist",
-    "sourceMap": true,
+    "lib": ["dom", "ESNext", "scripthost"],
+    "strict": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "module": "ESNext",
+    "target": "ESNext",
+    "sourceMap": false,
+    "incremental": true,
     "declaration": true,
     "stripInternal": true,
-    "importHelpers": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "emitDeclarationOnly": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
-  },
-  "include": ["./src/**/*"],
-  "exclude": ["**/__tests__/**/*"]
+  }
 }

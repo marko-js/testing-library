@@ -1,5 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
-import { render, fireEvent, cleanup } from "..";
+import { render, fireEvent, screen, cleanup } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import UpdateCounter from "./fixtures/update-counter.marko";
@@ -8,11 +7,10 @@ import HelloName from "./fixtures/hello-name.marko";
 import Clickable from "./fixtures/clickable.marko";
 import ScopedId from "./fixtures/scoped-id.marko";
 
-afterEach(cleanup);
-
 test("renders interactive content in the document", async () => {
   const { getByText } = await render(Counter);
   expect(getByText(/Value: 0/)).toBeInTheDocument();
+  expect(screen.getByText(/Value: 0/)).toBeInTheDocument();
 
   await fireEvent.click(getByText("Increment"));
 
@@ -69,59 +67,53 @@ test("records user events", async () => {
 
   expect(emitted("unknown-event")).toHaveProperty("length", 0);
 
-  expect(emitted("button-click")).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            Object {
-              "count": 0,
-            },
-          ],
-          Array [
-            Object {
-              "count": 1,
-            },
-          ],
-        ]
-    `);
+  expect(emitted("button-click")).toMatchSnapshot();
 
-  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
-            Array [
-              "button-click",
-              "button-click",
-            ]
-      `);
+  expect(emitted().map(({ type }) => type)).toMatchSnapshot();
 
   await fireEvent.click(button);
 
-  expect(emitted("button-click")).toMatchInlineSnapshot(`
-        Array [
-          Array [
-            Object {
-              "count": 2,
-            },
-          ],
-        ]
-    `);
-  expect(emitted().map(({ type }) => type)).toMatchInlineSnapshot(`
-            Array [
-              "button-click",
-            ]
-      `);
+  expect(emitted("button-click")).toMatchSnapshot();
+  expect(emitted().map(({ type }) => type)).toMatchSnapshot();
 });
 
 test("errors when trying to record internal events", async () => {
   const { emitted } = await render(Clickable);
-  expect(() => emitted("mount" as string)).toThrowErrorMatchingInlineSnapshot(
-    `"The emitted helper cannot be used to listen to internal events."`
-  );
+  expect(() => emitted("mount" as string)).toThrowErrorMatchingSnapshot();
 });
 
-test("cleanup removes content from the document", async () => {
-  const { getByText } = await render(Counter);
-  const node = getByText(/Value: 0/);
+test("global cleanup removes content from the document", async () => {
+  const component = await render(Counter);
+  const node = component.getByText(/Value: 0/);
   expect(node).toBeInTheDocument();
+  expect(screen.getByText(/Value: 0/)).toEqual(node);
   cleanup();
   expect(node).not.toBeInTheDocument();
+});
+
+test("local cleanup removes single component from the document", async () => {
+  const componentA = await render(Counter);
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(1);
+  const componentB = await render(Counter);
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(2);
+
+  componentA.cleanup();
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(1);
+
+  componentB.cleanup();
+  expect(screen.queryAllByText(/Value: 0/)).toHaveLength(0);
+});
+
+test("local cleanup fails if component already cleaned up", async () => {
+  const componentA = await render(Counter);
+  const componentB = await render(Counter);
+  expect(screen.getAllByText(/Value: 0/)).toHaveLength(2);
+
+  componentA.cleanup();
+  expect(() => componentA.cleanup()).toThrowErrorMatchingSnapshot();
+
+  cleanup();
+  expect(() => componentB.cleanup()).toThrowErrorMatchingSnapshot();
 });
 
 test("can render into a different container", async () => {

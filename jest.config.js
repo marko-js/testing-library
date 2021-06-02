@@ -7,24 +7,15 @@ module.exports = {
       preset: "@marko/jest/preset/node",
     }),
   ],
-  coverageThreshold: {
-    global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100,
-    },
-  },
 };
 
 function project(displayName, config) {
   return {
     ...config,
     displayName,
-    testRegex: `/__tests__/([^.]+\\.)?${displayName}\\.ts$`,
-    transform: {
-      "\\.ts$": "ts-jest",
-    },
     coveragePathIgnorePatterns: ["/__tests__/"],
+    setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
+    testRegex: `/__tests__/([^.]+\\.)?${displayName}\\.ts$`,
+    transform: { "\\.ts$": ["esbuild-jest", { sourcemap: true }] },
   };
 }
