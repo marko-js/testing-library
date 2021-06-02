@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/marko-js/testing-library/compare/v4.1.0...v5.0.0) (2021-06-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for `cleanup-after-each` import, now this is the default
+
+### Features
+
+* support `screen` export ([#12](https://github.com/marko-js/testing-library/issues/12)) ([fe01359](https://github.com/marko-js/testing-library/commit/fe0135949c19029645293d722ba75b165281e5af))
+
 ## [4.1.0](https://github.com/marko-js/testing-library/compare/v4.0.3...v4.1.0) (2021-04-06)
 
 
