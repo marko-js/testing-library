@@ -82,7 +82,31 @@ function failIfNoWindow() {
   }
 }
 
-const setImmediate = global.setImmediate || setTimeout;
+type Callback = (...args: unknown[]) => void;
+const tick =
+  // Re-implements the same scheduler Marko 4/5 is using internally.
+  typeof window === "object" && typeof window.postMessage === "function"
+    ? (() => {
+        let queue: Callback[] = [];
+        const id = `${Math.random()}`;
+        window.addEventListener("message", ({ data }) => {
+          if (data === id) {
+            const callbacks = queue;
+            queue = [];
+            for (const cb of callbacks) {
+              cb();
+            }
+          }
+        });
+
+        return (cb: Callback) => {
+          if (queue.push(cb) === 1) {
+            window.postMessage(id, "*");
+          }
+        };
+      })()
+    : (cb: Callback) => setTimeout(cb, 0);
+
 function waitForBatchedUpdates() {
-  return new Promise((resolve) => setImmediate(() => setImmediate(resolve)));
+  return new Promise(tick);
 }
