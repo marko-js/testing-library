@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.3](https://github.com/marko-js/testing-library/compare/v5.0.2...v5.0.3) (2021-06-03)
+
+
+### Bug Fixes
+
+* use batching closer to Marko's for fireEvent ([69c0d99](https://github.com/marko-js/testing-library/commit/69c0d99eeac8efc1749ae2a9f57d4e7447d9af81))
+
 ### [5.0.2](https://github.com/marko-js/testing-library/compare/v5.0.1...v5.0.2) (2021-06-02)
 
 
