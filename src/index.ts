@@ -17,7 +17,7 @@ export { FireFunction, FireObject, fireEvent } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
-export let screen: typeof testingLibraryScreen;
+export const screen: typeof testingLibraryScreen = {} as any;
 
 let activeContainer: DocumentFragment | undefined;
 
@@ -50,8 +50,7 @@ export async function render<T extends Template>(
   ));
   (container as any).outerHTML = html; // Fixes prettyDOM for container
 
-  // For SSR tests screen is always the last rendered component.
-  screen = {
+  const queries = {
     debug: function debug(element, maxLength, options) {
       if (!element) {
         debug(Array.from(container.children), maxLength, options);
@@ -65,6 +64,9 @@ export async function render<T extends Template>(
     },
     ...within(container as any as HTMLElement),
   } as typeof testingLibraryScreen;
+
+  // For SSR tests screen is always references the last rendered component.
+  Object.assign(screen, queries);
 
   return {
     container,
@@ -89,7 +91,7 @@ export async function render<T extends Template>(
 
       cleanupComponent();
     },
-    ...screen,
+    ...queries,
   } as const;
 }
 
