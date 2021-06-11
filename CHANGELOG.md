@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.0.4](https://github.com/marko-js/testing-library/compare/v5.0.3...v5.0.4) (2021-06-11)
+
+
+### Bug Fixes
+
+* improve commonjs support for ssr screen api ([4ef10a3](https://github.com/marko-js/testing-library/commit/4ef10a3bcd072c6e54895213d63e6f317581db1e))
+
 ### [5.0.3](https://github.com/marko-js/testing-library/compare/v5.0.2...v5.0.3) (2021-06-03)
 
 
