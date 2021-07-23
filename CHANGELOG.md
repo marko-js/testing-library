@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/marko-js/testing-library/compare/v5.0.4...v5.1.0) (2021-07-23)
+
+
+### Features
+
+* expose helper to perform action and wait for update ([#13](https://github.com/marko-js/testing-library/issues/13)) ([7cd9d12](https://github.com/marko-js/testing-library/commit/7cd9d12f510a61b42d96fa0aae8d784692a555d8))
+
 ### [5.0.4](https://github.com/marko-js/testing-library/compare/v5.0.3...v5.0.4) (2021-06-11)
 
 
