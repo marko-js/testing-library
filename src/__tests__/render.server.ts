@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, cleanup } from "..";
+import { render, screen, fireEvent, cleanup, act } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import Clickable from "./fixtures/clickable.marko";
@@ -57,11 +57,20 @@ test("fails when checking emitted events", async () => {
   );
 });
 
+test("fails when calling act", async () => {
+  const { getByText } = await render(Counter);
+  await expect(
+    act(() => getByText("Increment").click())
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
+  );
+});
+
 test("fails when emitting events", async () => {
   const { getByText } = await render(Counter);
   await expect(
     fireEvent.click(getByText("Increment"))
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Cannot fire events when testing on the server side. Please use @marko/testing-library in a browser environment."`
+    `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
   );
 });
