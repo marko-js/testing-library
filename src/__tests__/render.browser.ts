@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, cleanup } from "..";
+import { render, fireEvent, screen, cleanup, act } from "..";
 import Counter from "./fixtures/counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import UpdateCounter from "./fixtures/update-counter.marko";
@@ -120,6 +120,14 @@ test("can render into a different container", async () => {
   const container = document.createElement("main");
   const { getByText } = await render(HelloWorld, null, { container });
   expect(getByText("Hello World")).toHaveProperty("parentNode", container);
+});
+
+test("act waits for pending updates", async () => {
+  const { getByText } = await render(Counter);
+  expect(getByText(/Value: 0/)).toBeInTheDocument();
+
+  await act(() => getByText("Increment").click());
+  expect(getByText("Value: 1")).toBeInTheDocument();
 });
 
 test("fireEvent waits for pending updates", async () => {

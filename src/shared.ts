@@ -48,23 +48,28 @@ export type FireObject = {
   ) => Promise<ReturnType<originalFireFunction>>;
 };
 
-export const fireEvent = (async (...params) => {
-  failIfNoWindow();
-  const result = originalFireEvent(...params);
+export async function act<T extends (...args: unknown[]) => unknown>(fn: T) {
+  type Return = ReturnType<T>;
+  if (typeof window === "undefined") {
+    throw new Error(
+      "Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."
+    );
+  }
+
+  const result = await fn();
   await waitForBatchedUpdates();
-  return result;
-}) as FireFunction & FireObject;
+  return result as T extends (...args: unknown[]) => Promise<unknown>
+    ? AsyncReturnValue<T>
+    : Return;
+}
+
+export const fireEvent = ((...params) =>
+  act(() => originalFireEvent(...params))) as FireFunction & FireObject;
 
 (Object.keys(originalFireEvent) as EventType[]).forEach(
   (eventName: EventType) => {
     const fire = originalFireEvent[eventName];
-    fireEvent[eventName] = async (...params) => {
-      failIfNoWindow();
-      const result = fire(...params);
-
-      await waitForBatchedUpdates();
-      return result;
-    };
+    fireEvent[eventName] = (...params) => act(() => fire(...params));
   }
 );
 
@@ -73,14 +78,6 @@ export type AsyncReturnValue<
 > = Parameters<
   NonNullable<Parameters<ReturnType<AsyncFunction>["then"]>[0]>
 >[0];
-
-function failIfNoWindow() {
-  if (typeof window === "undefined") {
-    throw new Error(
-      "Cannot fire events when testing on the server side. Please use @marko/testing-library in a browser environment."
-    );
-  }
-}
 
 type Callback = (...args: unknown[]) => void;
 const tick =
