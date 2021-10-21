@@ -9,6 +9,8 @@ import { JSDOM } from "jsdom";
 import {
   within,
   logDOM,
+  BoundFunctions,
+  queries as Queries,
   screen as testingLibraryScreen,
 } from "@testing-library/dom";
 import { autoCleanupEnabled } from "./shared";
@@ -26,7 +28,18 @@ export async function render<T extends Template>(
   input: Parameters<NonNullable<T["renderToString"]>>[0] = {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: RenderOptions
-) {
+): Promise<
+  BoundFunctions<typeof Queries> & {
+    container: HTMLElement | DocumentFragment;
+    debug: typeof testingLibraryScreen["debug"];
+    emitted<N extends string = "*">(
+      type?: N extends InternalEventNames ? never : N
+    ): NonNullable<EventRecord[N]>;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rerender(newInput?: typeof input): Promise<void>;
+    cleanup(): void;
+  }
+> {
   if (template && "default" in template) {
     template = template.default;
   }

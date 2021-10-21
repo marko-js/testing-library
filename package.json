@@ -5,8 +5,8 @@
   "author": "Dylan Piercey <dpiercey@ebay.com>",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
-    "@testing-library/dom": "^7",
-    "jsdom": "^16"
+    "@testing-library/dom": "^8",
+    "jsdom": "^18"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",

@@ -1,4 +1,3 @@
-import type { OptionsReceived } from "pretty-format";
 import type {
   RenderOptions,
   Template,
@@ -6,7 +5,7 @@ import type {
   InternalEventNames,
   AsyncReturnValue,
 } from "./shared";
-import { within, logDOM } from "@testing-library/dom";
+import { within, logDOM, PrettyDOMOptions } from "@testing-library/dom";
 import { autoCleanupEnabled, INTERNAL_EVENTS } from "./shared";
 
 interface MountedComponent {
@@ -120,7 +119,7 @@ export async function render<T extends Template>(
     debug: function debug(
       element?: Element | HTMLDocument | (Element | HTMLDocument)[] | undefined,
       maxLength?: number,
-      options?: OptionsReceived
+      options?: PrettyDOMOptions
     ) {
       if (!element) {
         debug(Array.from(container.children), maxLength, options);
