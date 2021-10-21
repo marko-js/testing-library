@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/marko-js/testing-library/compare/v5.1.0...v6.0.0) (2021-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* see https://github.com/testing-library/dom-testing-library/releases/tag/v8.0.0
+
+### Features
+
+* upgrade to @testing-library/dom@8 ([2760e58](https://github.com/marko-js/testing-library/commit/2760e58b26459f9a804a2751619c0e0e62a88229))
+
 ## [5.1.0](https://github.com/marko-js/testing-library/compare/v5.0.4...v5.1.0) (2021-07-23)
 
 
