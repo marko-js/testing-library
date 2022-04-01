@@ -1,5 +1,6 @@
 import { render, fireEvent, screen, cleanup, act } from "..";
 import Counter from "./fixtures/counter.marko";
+import SplitCounter from "./fixtures/split-counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import UpdateCounter from "./fixtures/update-counter.marko";
 import HelloWorld from "./fixtures/hello-world.marko";
@@ -15,6 +16,17 @@ test("renders interactive content in the document", async () => {
   await fireEvent.click(getByText("Increment"));
 
   expect(getByText("Value: 1")).toBeInTheDocument();
+});
+
+test("renders interactive split component in the document", async () => {
+  const { getByText } = await render(SplitCounter, { message: "Count" });
+  expect(getByText(/0/)).toBeInTheDocument();
+  expect(getByText(/Count/)).toBeInTheDocument();
+  expect(screen.getByText(/0/)).toBeInTheDocument();
+
+  await fireEvent.click(getByText("Increment"));
+
+  expect(getByText("1")).toBeInTheDocument();
 });
 
 test("renders interactive content in the document with Marko 3", async () => {

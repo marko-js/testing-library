@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, cleanup, act } from "..";
 import Counter from "./fixtures/counter.marko";
+import SplitCounter from "./fixtures/split-counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
 import Clickable from "./fixtures/clickable.marko";
 import HelloName from "./fixtures/hello-name.marko";
@@ -14,6 +15,12 @@ test("renders static content in a document with a browser context", async () => 
   ).not.toBeNull();
 
   expect(container.firstElementChild).toHaveAttribute("class", "counter");
+});
+
+test("renders split component in the document", async () => {
+  const { getByText } = await render(SplitCounter, { message: "Count" });
+  expect(getByText(/0/)).toBeDefined();
+  expect(getByText(/Count/)).toBeDefined();
 });
 
 test("renders static content from a Marko 3 component", async () => {
