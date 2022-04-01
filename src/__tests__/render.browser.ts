@@ -82,6 +82,11 @@ test("errors when trying to record internal events", async () => {
   expect(() => emitted("mount" as string)).toThrowErrorMatchingSnapshot();
 });
 
+test("can access component instance in browser tests", async () => {
+  const { instance } = await render(Clickable, { a: 1 });
+  expect(instance.input).toHaveProperty("a", 1);
+});
+
 test("global cleanup removes content from the document", async () => {
   const component = await render(Counter);
   const node = component.getByText(/Value: 0/);
