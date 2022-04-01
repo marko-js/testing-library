@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/marko-js/testing-library/compare/v6.0.0...v6.1.0) (2022-04-01)
+
+
+### Features
+
+* expose instance property from render ([0fd1e22](https://github.com/marko-js/testing-library/commit/0fd1e220fcba4a5f5d0b951bae925241e1afaca3))
+
 ## [6.0.0](https://github.com/marko-js/testing-library/compare/v5.1.0...v6.0.0) (2021-10-21)
 
 
