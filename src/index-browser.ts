@@ -71,6 +71,7 @@ export async function render<T extends Template>(
 
   return {
     container,
+    instance,
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ) {

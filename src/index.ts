@@ -31,6 +31,7 @@ export async function render<T extends Template>(
 ): Promise<
   BoundFunctions<typeof Queries> & {
     container: HTMLElement | DocumentFragment;
+    instance: any;
     debug: typeof testingLibraryScreen["debug"];
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
@@ -83,16 +84,21 @@ export async function render<T extends Template>(
 
   return {
     container,
+    get instance(): any {
+      throw new Error(
+        "Cannot access component instance for server side tests."
+      );
+    },
     emitted<N extends string = "*">(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]> {
-      throw new Error("Components should not emit events on the server side");
+      throw new Error("Components should not emit events on the server side.");
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rerender(newInput?: typeof input): Promise<void> {
       return Promise.reject(
-        new Error("Components cannot re-render on the server side")
+        new Error("Components cannot re-render on the server side.")
       );
     },
     cleanup() {

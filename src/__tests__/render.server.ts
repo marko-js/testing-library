@@ -46,14 +46,14 @@ test("fails when rerendering", async () => {
   await expect(
     rerender({ name: "Dylan" })
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Components cannot re-render on the server side"`
+    `"Components cannot re-render on the server side."`
   );
 });
 
 test("fails when checking emitted events", async () => {
   const { emitted } = await render(Clickable);
   expect(() => emitted("button-click")).toThrowErrorMatchingInlineSnapshot(
-    `"Components should not emit events on the server side"`
+    `"Components should not emit events on the server side."`
   );
 });
 
@@ -72,5 +72,12 @@ test("fails when emitting events", async () => {
     fireEvent.click(getByText("Increment"))
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
+  );
+});
+
+test("fails when trying to read instance", async () => {
+  const result = await render(Clickable);
+  expect(() => result.instance).toThrowErrorMatchingInlineSnapshot(
+    `"Cannot access component instance for server side tests."`
   );
 });
