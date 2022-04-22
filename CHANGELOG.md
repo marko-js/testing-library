@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.1.2](https://github.com/marko-js/testing-library/compare/v6.1.1...v6.1.2) (2022-04-22)
+
+
+### Bug Fixes
+
+* avoid erroring when reading instance in ssr mode ([2f5fcc0](https://github.com/marko-js/testing-library/commit/2f5fcc0f16d38e8cd9d96de14578d53f8e2353e8))
+
 ### [6.1.1](https://github.com/marko-js/testing-library/compare/v6.1.0...v6.1.1) (2022-04-22)
 
 
