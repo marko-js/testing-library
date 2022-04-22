@@ -83,6 +83,7 @@ export async function render<T extends Template>(
   Object.assign(screen, queries);
 
   return {
+    ...queries,
     container,
     get instance(): any {
       throw new Error(
@@ -110,7 +111,6 @@ export async function render<T extends Template>(
 
       cleanupComponent();
     },
-    ...queries,
   } as const;
 }
 
