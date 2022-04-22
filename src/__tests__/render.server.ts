@@ -48,6 +48,11 @@ test("local cleanup removes single component from the document", async () => {
   expect(() => cleanup()).toThrowErrorMatchingSnapshot();
 });
 
+test("instance is undefined on the server", async () => {
+  const result = await render(Clickable);
+  expect(result.instance).toBeUndefined();
+});
+
 test("fails when rerendering", async () => {
   const { rerender } = await render(HelloName, { name: "Michael" });
   await expect(
@@ -79,12 +84,5 @@ test("fails when emitting events", async () => {
     fireEvent.click(getByText("Increment"))
   ).rejects.toThrowErrorMatchingInlineSnapshot(
     `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
-  );
-});
-
-test("fails when trying to read instance", async () => {
-  const result = await render(Clickable);
-  expect(() => result.instance).toThrowErrorMatchingInlineSnapshot(
-    `"Cannot access component instance for server side tests."`
   );
 });

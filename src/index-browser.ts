@@ -70,7 +70,6 @@ export async function render<T extends Template>(
   };
 
   return {
-    ...within(container as any as HTMLElement),
     container,
     instance,
     emitted<N extends string = "*">(
@@ -133,6 +132,7 @@ export async function render<T extends Template>(
         logDOM(element, maxLength, options);
       }
     },
+    ...within(container as any as HTMLElement),
   } as const;
 }
 

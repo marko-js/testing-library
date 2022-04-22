@@ -83,13 +83,8 @@ export async function render<T extends Template>(
   Object.assign(screen, queries);
 
   return {
-    ...queries,
     container,
-    get instance(): any {
-      throw new Error(
-        "Cannot access component instance for server side tests."
-      );
-    },
+    instance: undefined as any,
     emitted<N extends string = "*">(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type?: N extends InternalEventNames ? never : N
@@ -111,6 +106,7 @@ export async function render<T extends Template>(
 
       cleanupComponent();
     },
+    ...queries,
   } as const;
 }
 
