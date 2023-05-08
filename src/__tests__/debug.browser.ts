@@ -1,4 +1,4 @@
-import { render, cleanup } from "..";
+import { render, cleanup } from "../index-browser";
 import HelloWorld from "./fixtures/hello-world.marko";
 
 beforeEach(() => {

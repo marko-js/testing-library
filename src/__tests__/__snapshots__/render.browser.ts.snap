@@ -7,14 +7,14 @@ exports[`local cleanup fails if component already cleaned up 1`] = `"Component w
 exports[`local cleanup fails if component already cleaned up 2`] = `"Component was already destroyed before cleanup called."`;
 
 exports[`records user events 1`] = `
-Array [
-  Array [
-    Object {
+[
+  [
+    {
       "count": 0,
     },
   ],
-  Array [
-    Object {
+  [
+    {
       "count": 1,
     },
   ],
@@ -22,16 +22,16 @@ Array [
 `;
 
 exports[`records user events 2`] = `
-Array [
+[
   "button-click",
   "button-click",
 ]
 `;
 
 exports[`records user events 3`] = `
-Array [
-  Array [
-    Object {
+[
+  [
+    {
       "count": 2,
     },
   ],
@@ -39,7 +39,7 @@ Array [
 `;
 
 exports[`records user events 4`] = `
-Array [
+[
   "button-click",
 ]
 `;

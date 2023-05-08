@@ -1,4 +1,4 @@
-import { render, fireEvent, screen, cleanup, act } from "..";
+import { render, fireEvent, screen, cleanup, act } from "../index-browser";
 import Counter from "./fixtures/counter.marko";
 import SplitCounter from "./fixtures/split-counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
