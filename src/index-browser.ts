@@ -90,6 +90,39 @@ export async function render<T extends Template>(
 
       return copy as NonNullable<EventRecord[N]>;
     },
+    waitForEmitted(type = "*", options?: { timeout?: number }) {
+      if (INTERNAL_EVENTS.includes(type as InternalEventNames)) {
+        throw new Error(`Cannot wait for the internal "${type}" event.`);
+      }
+
+      const events = eventRecord[type];
+      if (events?.length) {
+        return Promise.resolve(events.pop());
+      }
+
+      return new Promise<unknown>((resolve, reject) => {
+        const timeout = options?.timeout ?? 1000;
+
+        if (timeout > 0) {
+          const pass = () => {
+            instance.removeListener(type, pass);
+            clearTimeout(timeoutId);
+            resolve(eventRecord[type]!.pop());
+          };
+          const fail = () => {
+            const err = new Error(`Timed out waiting for "${type}" event.`);
+            err.name = "TimeoutError";
+            instance.removeListener(type, pass);
+            reject(err);
+          };
+
+          const timeoutId = setTimeout(fail, timeout);
+          instance.on(type, pass);
+        } else {
+          instance.once(type, () => resolve(eventRecord[type]!.pop()));
+        }
+      });
+    },
     rerender(newInput?: typeof input): Promise<void> {
       return new Promise((resolve) => {
         instance.once(isV4 ? "update" : "render", () => resolve());

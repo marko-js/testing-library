@@ -36,6 +36,7 @@ export async function render<T extends Template>(
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]>;
+    waitForEmitted(type: string, options?: { timeout?: number }): Promise<void>;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rerender(newInput?: typeof input): Promise<void>;
     cleanup(): void;
@@ -89,6 +90,10 @@ export async function render<T extends Template>(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]> {
+      throw new Error("Components should not emit events on the server side.");
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    waitForEmitted(type: string, options?: { timeout?: number }) {
       throw new Error("Components should not emit events on the server side.");
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
