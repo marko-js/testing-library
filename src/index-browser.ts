@@ -6,7 +6,7 @@ import type {
   AsyncReturnValue,
 } from "./shared";
 import { within, logDOM, PrettyDOMOptions } from "@testing-library/dom";
-import { autoCleanupEnabled, INTERNAL_EVENTS } from "./shared";
+import { INTERNAL_EVENTS } from "./shared";
 
 interface MountedComponent {
   container: Element | DocumentFragment;
@@ -159,6 +159,9 @@ function cleanupComponent(mountedComponent: MountedComponent) {
 
 export * from "@testing-library/dom";
 
-if (autoCleanupEnabled && typeof afterEach === "function") {
+if (
+  !(globalThis as any).___disable_marko_test_auto_cleanup___ &&
+  typeof afterEach === "function"
+) {
   afterEach(cleanup);
 }

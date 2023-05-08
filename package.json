@@ -42,14 +42,24 @@
     "!*.tsbuildinfo"
   ],
   "homepage": "https://github.com/marko-js/testing-library",
-  "jsnext": "dist/esm",
   "keywords": [
     "marko",
     "testing-library"
   ],
   "license": "MIT",
-  "main": "dist/cjs",
-  "module": "dist/esm",
+  "main": "dist/index.js",
+  "browser": "dist/index-browser.js",
+  "exports": {
+    ".": {
+      "browser": {
+        "import": "./dist/index-browser.js",
+        "default": "./dist/index-browser.js"
+      },
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
+    },
+    "./dont-cleanup-after-each": "./dont-cleanup-after-each/index.js"
+  },
   "peerDependencies": {
     "marko": "^3 || ^4 || ^5"
   },
@@ -58,7 +68,7 @@
     "url": "https://github.com/marko-js/testing-library"
   },
   "scripts": {
-    "build": "node build.js && tsc",
+    "build": "node build.mjs && tsc",
     "ci:report": "codecov",
     "ci:test": "jest --ci --coverage",
     "format": "npm run lint:eslint -- --fix && npm run lint:prettier -- --write && (fixpack || true)",

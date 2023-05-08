@@ -1,6 +1,0 @@
-{
-  "main": "../dist/cjs/dont-cleanup",
-  "module": "../dist/esm/dont-cleanup",
-  "jsnext": "../dist/esm/dont-cleanup",
-  "types": "../dist/dont-cleanup.d.ts"
-}

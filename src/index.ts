@@ -13,7 +13,6 @@ import {
   queries as Queries,
   screen as testingLibraryScreen,
 } from "@testing-library/dom";
-import { autoCleanupEnabled } from "./shared";
 
 export { FireFunction, FireObject, fireEvent, act } from "./shared";
 
@@ -127,6 +126,9 @@ function cleanupComponent() {
 
 export * from "@testing-library/dom";
 
-if (autoCleanupEnabled && typeof afterEach === "function") {
+if (
+  !(globalThis as any).___disable_marko_test_auto_cleanup___ &&
+  typeof afterEach === "function"
+) {
   afterEach(cleanup);
 }

@@ -22,11 +22,6 @@ export interface Template {
   render(input: unknown, cb: (err: Error | null, result: any) => void): any;
 }
 
-export let autoCleanupEnabled = true;
-export function disableAutoCleanup() {
-  autoCleanupEnabled = false;
-}
-
 export const INTERNAL_EVENTS = [
   "create",
   "input",
