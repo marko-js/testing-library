@@ -14,14 +14,6 @@ export interface RenderOptions {
   container?: Element | DocumentFragment;
 }
 
-export interface Template {
-  renderToString?(
-    input: unknown,
-    cb: (err: Error | null, result: any) => void
-  ): any;
-  render(input: unknown, cb: (err: Error | null, result: any) => void): any;
-}
-
 export const INTERNAL_EVENTS = [
   "create",
   "input",

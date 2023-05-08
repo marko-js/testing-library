@@ -1,6 +1,5 @@
 import type {
   RenderOptions,
-  Template,
   EventRecord,
   InternalEventNames,
   AsyncReturnValue,
@@ -19,9 +18,9 @@ export { FireFunction, FireObject, fireEvent, act } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
-export async function render<T extends Template>(
+export async function render<T extends Marko.Template>(
   template: T | { default: T },
-  input: Parameters<T["render"]>[0] = {},
+  input: Marko.Input<T> = {} as any,
   options: RenderOptions = {}
 ) {
   if (template && "default" in template) {
@@ -36,7 +35,7 @@ export async function render<T extends Template>(
 
   // Doesn't use promise API so that we can support Marko v3
   const renderResult = (await new Promise((resolve, reject) =>
-    (template as T).render(input, (err, result) =>
+    (template as any).render(input, (err: any, result: any) =>
       err ? reject(err) : resolve(result)
     )
   )) as any;

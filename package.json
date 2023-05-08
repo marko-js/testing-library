@@ -3,6 +3,7 @@
   "description": "Simple and complete Marko testing utilities that encourage good testing practices.",
   "version": "6.1.2",
   "author": "Dylan Piercey <dpiercey@ebay.com>",
+  "browser": "dist/index-browser.js",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
     "@testing-library/dom": "^8",
@@ -35,6 +36,17 @@
     "standard-version": "^9.3.0",
     "typescript": "^4.3.2"
   },
+  "exports": {
+    ".": {
+      "browser": {
+        "import": "./dist/index-browser.js",
+        "default": "./dist/index-browser.js"
+      },
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
+    },
+    "./dont-cleanup-after-each": "./dont-cleanup-after-each/index.js"
+  },
   "files": [
     "dist",
     "dont-cleanup-after-each",
@@ -48,18 +60,6 @@
   ],
   "license": "MIT",
   "main": "dist/index.js",
-  "browser": "dist/index-browser.js",
-  "exports": {
-    ".": {
-      "browser": {
-        "import": "./dist/index-browser.js",
-        "default": "./dist/index-browser.js"
-      },
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.js"
-    },
-    "./dont-cleanup-after-each": "./dont-cleanup-after-each/index.js"
-  },
   "peerDependencies": {
     "marko": "^3 || ^4 || ^5"
   },
