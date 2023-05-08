@@ -23,7 +23,7 @@ export const INTERNAL_EVENTS = [
   "destroy",
 ] as const;
 
-export type InternalEventNames = typeof INTERNAL_EVENTS[number];
+export type InternalEventNames = (typeof INTERNAL_EVENTS)[number];
 
 export type FireFunction = (
   ...params: Parameters<originalFireFunction>

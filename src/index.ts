@@ -30,7 +30,7 @@ export async function render<T extends Marko.Template>(
   BoundFunctions<typeof Queries> & {
     container: HTMLElement | DocumentFragment;
     instance: any;
-    debug: typeof testingLibraryScreen["debug"];
+    debug: (typeof testingLibraryScreen)["debug"];
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]>;
