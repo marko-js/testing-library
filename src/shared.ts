@@ -14,19 +14,6 @@ export interface RenderOptions {
   container?: Element | DocumentFragment;
 }
 
-export interface Template {
-  renderToString?(
-    input: unknown,
-    cb: (err: Error | null, result: any) => void
-  ): any;
-  render(input: unknown, cb: (err: Error | null, result: any) => void): any;
-}
-
-export let autoCleanupEnabled = true;
-export function disableAutoCleanup() {
-  autoCleanupEnabled = false;
-}
-
 export const INTERNAL_EVENTS = [
   "create",
   "input",
@@ -36,7 +23,7 @@ export const INTERNAL_EVENTS = [
   "destroy",
 ] as const;
 
-export type InternalEventNames = typeof INTERNAL_EVENTS[number];
+export type InternalEventNames = (typeof INTERNAL_EVENTS)[number];
 
 export type FireFunction = (
   ...params: Parameters<originalFireFunction>

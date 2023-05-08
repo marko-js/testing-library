@@ -1,7 +1,6 @@
 import type {
   AsyncReturnValue,
   RenderOptions,
-  Template,
   EventRecord,
   InternalEventNames,
 } from "./shared";
@@ -13,7 +12,6 @@ import {
   queries as Queries,
   screen as testingLibraryScreen,
 } from "@testing-library/dom";
-import { autoCleanupEnabled } from "./shared";
 
 export { FireFunction, FireObject, fireEvent, act } from "./shared";
 
@@ -23,16 +21,16 @@ export const screen: typeof testingLibraryScreen = {} as any;
 
 let activeContainer: DocumentFragment | undefined;
 
-export async function render<T extends Template>(
+export async function render<T extends Marko.Template>(
   template: T | { default: T },
-  input: Parameters<NonNullable<T["renderToString"]>>[0] = {},
+  input: Marko.Input<T> = {} as any,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: RenderOptions
 ): Promise<
   BoundFunctions<typeof Queries> & {
     container: HTMLElement | DocumentFragment;
     instance: any;
-    debug: typeof testingLibraryScreen["debug"];
+    debug: (typeof testingLibraryScreen)["debug"];
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ): NonNullable<EventRecord[N]>;
@@ -46,10 +44,12 @@ export async function render<T extends Template>(
   }
 
   // Doesn't use promise API so that we can support Marko v3
-  const renderMethod = template.renderToString ? "renderToString" : "render";
+  const renderMethod = (template as any).renderToString
+    ? "renderToString"
+    : "render";
   const html = String(
     await new Promise((resolve, reject) =>
-      (template as T)[renderMethod]!(input, (err, result) =>
+      (template as any)[renderMethod]!(input, (err: any, result: any) =>
         err ? reject(err) : resolve(result)
       )
     )
@@ -127,6 +127,9 @@ function cleanupComponent() {
 
 export * from "@testing-library/dom";
 
-if (autoCleanupEnabled && typeof afterEach === "function") {
+if (
+  !(globalThis as any).___disable_marko_test_auto_cleanup___ &&
+  typeof afterEach === "function"
+) {
   afterEach(cleanup);
 }

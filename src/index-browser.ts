@@ -1,12 +1,11 @@
 import type {
   RenderOptions,
-  Template,
   EventRecord,
   InternalEventNames,
   AsyncReturnValue,
 } from "./shared";
 import { within, logDOM, PrettyDOMOptions } from "@testing-library/dom";
-import { autoCleanupEnabled, INTERNAL_EVENTS } from "./shared";
+import { INTERNAL_EVENTS } from "./shared";
 
 interface MountedComponent {
   container: Element | DocumentFragment;
@@ -19,9 +18,9 @@ export { FireFunction, FireObject, fireEvent, act } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
-export async function render<T extends Template>(
+export async function render<T extends Marko.Template>(
   template: T | { default: T },
-  input: Parameters<T["render"]>[0] = {},
+  input: Marko.Input<T> = {} as any,
   options: RenderOptions = {}
 ) {
   if (template && "default" in template) {
@@ -36,7 +35,7 @@ export async function render<T extends Template>(
 
   // Doesn't use promise API so that we can support Marko v3
   const renderResult = (await new Promise((resolve, reject) =>
-    (template as T).render(input, (err, result) =>
+    (template as any).render(input, (err: any, result: any) =>
       err ? reject(err) : resolve(result)
     )
   )) as any;
@@ -159,6 +158,9 @@ function cleanupComponent(mountedComponent: MountedComponent) {
 
 export * from "@testing-library/dom";
 
-if (autoCleanupEnabled && typeof afterEach === "function") {
+if (
+  !(globalThis as any).___disable_marko_test_auto_cleanup___ &&
+  typeof afterEach === "function"
+) {
   afterEach(cleanup);
 }
