@@ -20,7 +20,7 @@ export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Marko.Template>(
   template: T | { default: T },
-  input: Marko.Input<T> = {} as any,
+  input: Marko.TemplateInput<Marko.Input<T>> = {} as any,
   options: RenderOptions = {}
 ) {
   if (template && "default" in template) {
