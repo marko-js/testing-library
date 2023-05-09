@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.1.4](https://github.com/marko-js/testing-library/compare/v6.1.3...v6.1.4) (2023-05-09)
+
+
+### Bug Fixes
+
+* allow  in template input types ([25282b6](https://github.com/marko-js/testing-library/commit/25282b69c44d9ce5eec4348597a74791b945ee1d))
+
 ### [6.1.3](https://github.com/marko-js/testing-library/compare/v6.1.2...v6.1.3) (2023-05-08)
 
 ### [6.1.2](https://github.com/marko-js/testing-library/compare/v6.1.1...v6.1.2) (2022-04-22)
