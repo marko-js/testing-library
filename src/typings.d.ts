@@ -11,5 +11,7 @@ declare namespace Marko {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface Template {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export type TemplateInput<T> = any;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export type Input<T> = any;
 }

@@ -23,7 +23,7 @@ let activeContainer: DocumentFragment | undefined;
 
 export async function render<T extends Marko.Template>(
   template: T | { default: T },
-  input: Marko.Input<T> = {} as any,
+  input: Marko.TemplateInput<Marko.Input<T>> = {} as any,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: RenderOptions
 ): Promise<
