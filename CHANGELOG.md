@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.1.5](https://github.com/marko-js/testing-library/compare/v6.1.4...v6.1.5) (2023-12-07)
+
+
+### Bug Fixes
+
+* bump jsdom version ([abb8ef9](https://github.com/marko-js/testing-library/commit/abb8ef994a8433994bed1b00aa8a840030d65c97))
+
 ### [6.1.4](https://github.com/marko-js/testing-library/compare/v6.1.3...v6.1.4) (2023-05-09)
 
 
