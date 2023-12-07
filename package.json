@@ -7,7 +7,7 @@
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
     "@testing-library/dom": "^9",
-    "jsdom": "^22"
+    "jsdom": "^23"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
