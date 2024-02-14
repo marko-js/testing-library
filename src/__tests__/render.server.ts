@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, cleanup, act } from "..";
+import { render, screen, fireEvent, cleanup, act, normalize } from "..";
 import Counter from "./fixtures/counter.marko";
 import SplitCounter from "./fixtures/split-counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
@@ -15,6 +15,22 @@ test("renders static content in a document with a browser context", async () => 
   ).not.toBeNull();
 
   expect(container.firstElementChild).toHaveAttribute("class", "counter");
+});
+
+test("normalizes a rendered containers content", async () => {
+  const { container } = await render(Counter);
+  expect(normalize(container)).toMatchInlineSnapshot(`
+    <DocumentFragment>
+      <div
+        class="counter"
+      >
+        Value: 0
+        <button>
+          Increment
+        </button>
+      </div>
+    </DocumentFragment>
+  `);
 });
 
 test("renders split component in the document", async () => {

@@ -9,7 +9,7 @@ declare namespace Marko {
   // against the v3 compat layer in Marko 4.
 
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Template {}
+  export interface Template<Input = unknown, Return = unknown> {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export type TemplateInput<T> = any;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

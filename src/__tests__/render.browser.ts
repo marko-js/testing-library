@@ -1,4 +1,11 @@
-import { render, fireEvent, screen, cleanup, act } from "../index-browser";
+import {
+  render,
+  fireEvent,
+  screen,
+  cleanup,
+  act,
+  normalize,
+} from "../index-browser";
 import Counter from "./fixtures/counter.marko";
 import SplitCounter from "./fixtures/split-counter.marko";
 import LegacyCounter from "./fixtures/legacy-counter";
@@ -16,6 +23,23 @@ test("renders interactive content in the document", async () => {
   await fireEvent.click(getByText("Increment"));
 
   expect(getByText("Value: 1")).toBeInTheDocument();
+});
+
+test("normalizes a rendered containers content", async () => {
+  const { container } = await render(Counter);
+
+  expect(normalize(container)).toMatchInlineSnapshot(`
+    <div>
+      <div
+        class="counter"
+      >
+        Value: 0
+        <button>
+          Increment
+        </button>
+      </div>
+    </div>
+  `);
 });
 
 test("renders interactive split component in the document", async () => {

@@ -35,6 +35,83 @@ export type FireObject = {
   ) => Promise<ReturnType<originalFireFunction>>;
 };
 
+const SHOW_ELEMENT = 1;
+const SHOW_COMMENT = 128;
+const COMMENT_NODE = 8;
+
+export function normalize<T extends DocumentFragment | Element>(container: T) {
+  const idMap: Map<string, number> = new Map();
+  const clone = container.cloneNode(true) as T;
+  const document = container.ownerDocument!;
+  const commentAndElementWalker = document.createTreeWalker(
+    clone,
+    SHOW_ELEMENT | SHOW_COMMENT
+  );
+
+  let node: Comment | Element;
+  let nextNode = commentAndElementWalker.nextNode();
+  while ((node = nextNode as Comment | Element)) {
+    nextNode = commentAndElementWalker.nextNode();
+    if (isComment(node)) {
+      node.remove();
+    } else {
+      const { id, attributes } = node;
+      if (/\d/.test(id)) {
+        let idIndex = idMap.get(id);
+
+        if (idIndex === undefined) {
+          idIndex = idMap.size;
+          idMap.set(id, idIndex);
+        }
+
+        node.id = `GENERATED-${idIndex}`;
+      }
+
+      for (let i = attributes.length; i--; ) {
+        const attr = attributes[i];
+
+        if (/^data-(w-|widget$|marko(-|$))/.test(attr.name)) {
+          node.removeAttributeNode(attr);
+        }
+      }
+    }
+  }
+
+  if (idMap.size) {
+    const elementWalker = document.createTreeWalker(clone, SHOW_ELEMENT);
+
+    nextNode = elementWalker.nextNode();
+    while ((node = nextNode as Element)) {
+      nextNode = elementWalker.nextNode();
+      const { attributes } = node;
+
+      for (let i = attributes.length; i--; ) {
+        const attr = attributes[i];
+        const { value } = attr;
+        const updated = value
+          .split(" ")
+          .map((part) => {
+            const idIndex = idMap.get(part);
+            if (idIndex === undefined) {
+              return part;
+            }
+
+            return `GENERATED-${idIndex}`;
+          })
+          .join(" ");
+
+        if (value !== updated) {
+          attr.value = updated;
+        }
+      }
+    }
+  }
+
+  clone.normalize();
+
+  return clone;
+}
+
 export async function act<T extends (...args: unknown[]) => unknown>(fn: T) {
   type Return = ReturnType<T>;
   if (typeof window === "undefined") {
@@ -93,4 +170,8 @@ const tick =
 
 function waitForBatchedUpdates() {
   return new Promise(tick);
+}
+
+function isComment(node: Node): node is Comment {
+  return node.nodeType === COMMENT_NODE;
 }
