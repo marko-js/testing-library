@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/marko-js/testing-library/compare/v6.1.5...v6.2.0) (2024-02-14)
+
+
+### Features
+
+* expose normalize api ([#24](https://github.com/marko-js/testing-library/issues/24)) ([80bd74a](https://github.com/marko-js/testing-library/commit/80bd74afcf1fbf072955c164c2f63e111589c1ec))
+
 ### [6.1.5](https://github.com/marko-js/testing-library/compare/v6.1.4...v6.1.5) (2023-12-07)
 
 
