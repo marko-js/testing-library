@@ -147,6 +147,21 @@ With mocha you can use `mocha -r @marko/testing-library/dont-cleanup-after-each`
 
 If you are using Jest, you can include `setupFilesAfterEnv: ["@marko/testing-library/dont-cleanup-after-each"]` in your Jest config to avoid doing this in each file.
 
+### `normalize()`
+
+Returns a clone of the passed DOM container with Marko's internal markers removed (data-marko, etc.), id's and whitespace are also normalized.
+
+```javascript
+import { render, normalize } from "@marko/testing-library";
+import HelloTemplate from "./src/__test__/fixtures/hello-name.marko";
+
+test("snapshot", async () => {
+  const { container } = await render(HelloTemplate, { name: "World" });
+
+  expect(normalize(container)).toMatchSnapshot();
+});
+```
+
 ## Setup
 
 Marko testing library is not dependent on any test runner, however it is dependent on the test environment. These utilities work for testing both server side, and client side Marko templates and provide a slightly different implementation for each. This is done using a [browser shim](https://github.com/defunctzombie/package-browser-field-spec), just like in Marko.

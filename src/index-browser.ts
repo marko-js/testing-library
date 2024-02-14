@@ -14,7 +14,7 @@ interface MountedComponent {
 }
 const mountedComponents = new Set<MountedComponent>();
 
-export { FireFunction, FireObject, fireEvent, act } from "./shared";
+export { FireFunction, FireObject, fireEvent, act, normalize } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 

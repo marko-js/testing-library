@@ -13,7 +13,7 @@ import {
   screen as testingLibraryScreen,
 } from "@testing-library/dom";
 
-export { FireFunction, FireObject, fireEvent, act } from "./shared";
+export { FireFunction, FireObject, fireEvent, act, normalize } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
@@ -21,7 +21,7 @@ export const screen: typeof testingLibraryScreen = {} as any;
 
 let activeContainer: DocumentFragment | undefined;
 
-export async function render<T extends Marko.Template>(
+export async function render<T extends Marko.Template<any, any>>(
   template: T | { default: T },
   input: Marko.TemplateInput<Marko.Input<T>> = {} as any,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
