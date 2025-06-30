@@ -33,18 +33,44 @@ export async function render<T extends Marko.Template>(
       document.body.appendChild(document.createElement("div")),
   } = options;
 
-  // Doesn't use promise API so that we can support Marko v3
-  const renderResult = (await new Promise((resolve, reject) =>
-    (template as any).render(input, (err: any, result: any) =>
-      err ? reject(err) : resolve(result)
-    )
-  )) as any;
+  const isV6 = !(template as any).renderSync;
+  let instance: any;
+  let eventRecord: EventRecord | undefined;
+  let isV4 = false;
 
-  const isV4 = renderResult.getComponent;
-  const instance = renderResult
-    .appendTo(container)
-    [isV4 ? "getComponent" : "getWidget"]();
-  const eventRecord: EventRecord = {};
+  if (isV6) {
+    instance = (template as any).mount(input, container);
+  } else {
+    // Doesn't use promise API so that we can support Marko v3
+    const renderResult = (await new Promise((resolve, reject) =>
+      (template as any).render(input, (err: any, result: any) =>
+        err ? reject(err) : resolve(result)
+      )
+    )) as any;
+
+    isV4 = !!renderResult.getComponent;
+    instance = renderResult
+      .appendTo(container)
+      [isV4 ? "getComponent" : "getWidget"]();
+    eventRecord = {};
+
+    const _emit = instance.emit;
+    instance.emit = (...args: [string, ...unknown[]]) => {
+      const [type] = args;
+
+      if (!INTERNAL_EVENTS.includes(type as InternalEventNames)) {
+        const userArgs = args.slice(1);
+        (eventRecord!["*"] || (eventRecord!["*"] = [])).push({
+          type,
+          args: userArgs,
+        });
+        (eventRecord![type] || (eventRecord![type] = [])).push(userArgs);
+      }
+
+      return _emit.apply(instance, args);
+    };
+  }
+
   const mountedComponent: MountedComponent = {
     container,
     instance,
@@ -52,28 +78,18 @@ export async function render<T extends Marko.Template>(
   };
   mountedComponents.add(mountedComponent);
 
-  const _emit = instance.emit;
-  instance.emit = (...args: [string, ...unknown[]]) => {
-    const [type] = args;
-
-    if (!INTERNAL_EVENTS.includes(type as InternalEventNames)) {
-      const userArgs = args.slice(1);
-      (eventRecord["*"] || (eventRecord["*"] = [])).push({
-        type,
-        args: userArgs,
-      });
-      (eventRecord[type] || (eventRecord[type] = [])).push(userArgs);
-    }
-
-    return _emit.apply(instance, args);
-  };
-
   return {
     container,
     instance,
     emitted<N extends string = "*">(
       type?: N extends InternalEventNames ? never : N
     ) {
+      if (!eventRecord) {
+        throw new Error(
+          "The emitted helper cannot be used with tags api components, used spies on function event handlers instead."
+        );
+      }
+
       if (INTERNAL_EVENTS.includes(type as InternalEventNames)) {
         throw new Error(
           "The emitted helper cannot be used to listen to internal events."
@@ -90,6 +106,15 @@ export async function render<T extends Marko.Template>(
       return copy as NonNullable<EventRecord[N]>;
     },
     rerender(newInput?: typeof input): Promise<void> {
+      if (isV6) {
+        try {
+          instance.update(newInput);
+          return Promise.resolve();
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      }
+
       return new Promise((resolve) => {
         instance.once(isV4 ? "update" : "render", () => resolve());
 

@@ -43,16 +43,18 @@ export async function render<T extends Marko.Template<any, any>>(
     template = template.default;
   }
 
-  // Doesn't use promise API so that we can support Marko v3
-  const renderMethod = (template as any).renderToString
-    ? "renderToString"
-    : "render";
+  const isV6 = !(template as any).renderSync;
   const html = String(
-    await new Promise((resolve, reject) =>
-      (template as any)[renderMethod]!(input, (err: any, result: any) =>
-        err ? reject(err) : resolve(result)
-      )
-    )
+    await (isV6
+      ? (template as any).render(input)
+      : new Promise((resolve, reject) =>
+          // Doesn't use promise API so that we can support Marko v3
+          (template as any)[
+            (template as any).renderToString ? "renderToString" : "render"
+          ]!(input, (err: any, result: any) =>
+            err ? reject(err) : resolve(result)
+          )
+        ))
   );
 
   const {
