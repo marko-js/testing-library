@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/marko-js/testing-library/compare/v6.2.0...v6.3.0) (2025-06-30)
+
+
+### Features
+
+* marko 6 support ([ba3c997](https://github.com/marko-js/testing-library/commit/ba3c9974acae90861c2e0dcbb35854590d9aedeb))
+
 ## [6.2.0](https://github.com/marko-js/testing-library/compare/v6.1.5...v6.2.0) (2024-02-14)
 
 
