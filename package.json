@@ -19,7 +19,6 @@
     "@types/node": "^15.6.2",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "codecov": "^3.8.2",
     "esbuild": "^0.17.18",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.27.0",
@@ -70,7 +69,6 @@
   },
   "scripts": {
     "build": "node build.mjs && tsc",
-    "ci:report": "codecov",
     "ci:test": "jest --ci --coverage",
     "format": "npm run lint:eslint -- --fix && npm run lint:prettier -- --write && (fixpack || true)",
     "lint": "tsc && npm run lint:eslint && npm run lint:prettier -- -l && fixpack",

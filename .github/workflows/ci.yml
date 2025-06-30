@@ -27,4 +27,7 @@ jobs:
       - name: Run tests
         run: npm run ci:test
       - name: Report code coverage
-        run: npm run ci:report
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: marko-js/testing-library
