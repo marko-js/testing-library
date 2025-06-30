@@ -6,8 +6,8 @@
   "browser": "dist/index-browser.js",
   "bugs": "https://github.com/marko-js/testing-library/issues",
   "dependencies": {
-    "@testing-library/dom": "^9",
-    "jsdom": "^23"
+    "@testing-library/dom": "^10",
+    "jsdom": "^26"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
@@ -62,7 +62,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "peerDependencies": {
-    "marko": "^3 || ^4 || ^5"
+    "marko": "3 - 6"
   },
   "repository": {
     "type": "git",
