@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.1](https://github.com/marko-js/testing-library/compare/v6.3.0...v6.3.1) (2025-07-01)
+
+
+### Bug Fixes
+
+* improve scheduler to support marko 6 ([21ffd18](https://github.com/marko-js/testing-library/commit/21ffd18df774b88aea2b2f2fb5513d79e8856af8))
+* load mjs file for esm browser env ([1502f1e](https://github.com/marko-js/testing-library/commit/1502f1e8b9cba281fc5cead2580f3c8c58305c42))
+
 ## [6.3.0](https://github.com/marko-js/testing-library/compare/v6.2.0...v6.3.0) (2025-06-30)
 
 
