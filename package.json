@@ -39,7 +39,7 @@
   "exports": {
     ".": {
       "browser": {
-        "import": "./dist/index-browser.js",
+        "import": "./dist/index-browser.mjs",
         "default": "./dist/index-browser.js"
       },
       "import": "./dist/index.mjs",
