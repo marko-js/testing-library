@@ -145,8 +145,17 @@ export type AsyncReturnValue<
 
 type Callback = (...args: unknown[]) => void;
 const tick =
-  // Re-implements the same scheduler Marko 4/5 is using internally.
-  typeof window === "object" && typeof window.postMessage === "function"
+  // Re-implements the same scheduler Marko 4/5/6 is using internally.
+  typeof requestAnimationFrame === "function" &&
+  typeof MessageChannel === "function"
+    ? (cb: Callback) => {
+        requestAnimationFrame(() => {
+          const { port1, port2 } = new MessageChannel();
+          port1.onmessage = cb;
+          port2.postMessage(1);
+        });
+      }
+    : typeof window === "object" && typeof window.postMessage === "function"
     ? (() => {
         let queue: Callback[] = [];
         const id = `${Math.random()}`;
