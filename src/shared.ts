@@ -37,7 +37,9 @@ export type FireObject = {
 
 const SHOW_ELEMENT = 1;
 const SHOW_COMMENT = 128;
+const ELEMENT_NODE = 1;
 const COMMENT_NODE = 8;
+const MARKO_SCRIPT_REG = /\b\$MC\b|\bM\._\b|\("M"\)\("_"\)/;
 
 export function normalize<T extends DocumentFragment | Element>(container: T) {
   const idMap: Map<string, number> = new Map();
@@ -52,7 +54,7 @@ export function normalize<T extends DocumentFragment | Element>(container: T) {
   let nextNode = commentAndElementWalker.nextNode();
   while ((node = nextNode as Comment | Element)) {
     nextNode = commentAndElementWalker.nextNode();
-    if (isComment(node)) {
+    if (isComment(node) || isMarkoScript(node)) {
       node.remove();
     } else {
       const { id, attributes } = node;
@@ -183,4 +185,17 @@ function waitForBatchedUpdates() {
 
 function isComment(node: Node): node is Comment {
   return node.nodeType === COMMENT_NODE;
+}
+
+function isElement(node: Node): node is HTMLElement {
+  return node.nodeType === ELEMENT_NODE;
+}
+
+function isMarkoScript(node: Node): node is HTMLScriptElement {
+  return (
+    isElement(node) &&
+    node.tagName === "SCRIPT" &&
+    !(node as HTMLScriptElement).src &&
+    MARKO_SCRIPT_REG.test(node.textContent || "")
+  );
 }
