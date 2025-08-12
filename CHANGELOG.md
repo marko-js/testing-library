@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0](https://github.com/marko-js/testing-library/compare/v6.3.1...v6.4.0) (2025-08-12)
+
+
+### Features
+
+* strip marko generated scripts when normalizing ([e7a444f](https://github.com/marko-js/testing-library/commit/e7a444fea14c722be442b1878d203aac0b2a00f3))
+
 ### [6.3.1](https://github.com/marko-js/testing-library/compare/v6.3.0...v6.3.1) (2025-07-01)
 
 
