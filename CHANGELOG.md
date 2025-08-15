@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.1](https://github.com/marko-js/testing-library/compare/v6.4.0...v6.4.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* script filter tags api compat ([7c6f946](https://github.com/marko-js/testing-library/commit/7c6f946ae805ef02b95a06731061fc5f819f582b))
+
 ## [6.4.0](https://github.com/marko-js/testing-library/compare/v6.3.1...v6.4.0) (2025-08-12)
 
 
