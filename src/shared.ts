@@ -39,7 +39,7 @@ const SHOW_ELEMENT = 1;
 const SHOW_COMMENT = 128;
 const ELEMENT_NODE = 1;
 const COMMENT_NODE = 8;
-const MARKO_SCRIPT_REG = /\b\$MC\b|\bM\._\b|\("M"\)\("_"\)/;
+const MARKO_SCRIPT_REG = /\b\$MC\b|\bM\.[_s]\b|\("M"\)\("[_s]"\)/;
 
 export function normalize<T extends DocumentFragment | Element>(container: T) {
   const idMap: Map<string, number> = new Map();
