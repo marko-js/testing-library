@@ -1,19 +1,19 @@
 import {
-  render,
-  fireEvent,
-  screen,
-  cleanup,
   act,
+  cleanup,
+  fireEvent,
   normalize,
+  render,
+  screen,
 } from "../index-browser";
-import Counter from "./fixtures/counter.marko";
-import SplitCounter from "./fixtures/split-counter.marko";
-import LegacyCounter from "./fixtures/legacy-counter";
-import UpdateCounter from "./fixtures/update-counter.marko";
-import HelloWorld from "./fixtures/hello-world.marko";
-import HelloName from "./fixtures/hello-name.marko";
 import Clickable from "./fixtures/clickable.marko";
+import Counter from "./fixtures/counter.marko";
+import HelloName from "./fixtures/hello-name.marko";
+import HelloWorld from "./fixtures/hello-world.marko";
+import LegacyCounter from "./fixtures/legacy-counter";
 import ScopedId from "./fixtures/scoped-id.marko";
+import SplitCounter from "./fixtures/split-counter.marko";
+import UpdateCounter from "./fixtures/update-counter.marko";
 
 test("renders interactive content in the document", async () => {
   const { getByText } = await render(Counter);
@@ -67,14 +67,14 @@ test("can be rerendered with new input", async () => {
 
   expect(getByText(/Hello \w+/)).toHaveProperty(
     "textContent",
-    expect.stringContaining("Michael")
+    expect.stringContaining("Michael"),
   );
 
   await rerender({ name: "Dylan" });
 
   expect(getByText(/Hello \w+/)).toHaveProperty(
     "textContent",
-    expect.stringContaining("Dylan")
+    expect.stringContaining("Dylan"),
   );
 });
 
@@ -83,14 +83,14 @@ test("can be rerendered with no input (forced update)", async () => {
 
   expect(getByText(/Render Count: \d+/)).toHaveProperty(
     "textContent",
-    expect.stringContaining("Render Count: 1")
+    expect.stringContaining("Render Count: 1"),
   );
 
   await rerender();
 
   expect(getByText(/Render Count: \d+/)).toHaveProperty(
     "textContent",
-    expect.stringContaining("Render Count: 2")
+    expect.stringContaining("Render Count: 2"),
   );
 });
 
@@ -180,7 +180,7 @@ test("fireEvent waits for pending updates", async () => {
     new MouseEvent("click", {
       bubbles: true,
       cancelable: true,
-    })
+    }),
   );
 
   expect(getByText("Value: 1")).toBeInTheDocument();

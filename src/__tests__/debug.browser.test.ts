@@ -1,8 +1,8 @@
-import { render, cleanup } from "../index";
+import { cleanup, render } from "../index-browser";
 import HelloWorld from "./fixtures/hello-world.marko";
 
 beforeEach(() => {
-  jest.spyOn(console, "log").mockImplementation(() => {});
+  vi.spyOn(console, "log").mockImplementation(() => {});
 });
 
 afterEach(() => {
@@ -15,17 +15,17 @@ test("debug pretty prints the component content as html", async () => {
   debug();
   expect(console.log).toHaveBeenCalledTimes(1);
   expect(console.log).toHaveBeenCalledWith(
-    expect.stringContaining("Hello World")
+    expect.stringContaining("Hello World"),
   );
 });
 
 test("when passed an html element, will print it's content as html instead", async () => {
-  const { debug, container } = await render(HelloWorld);
-  const exampleNode = container.ownerDocument!.createElement("span");
+  const { debug } = await render(HelloWorld);
+  const exampleNode = document.createElement("span");
   exampleNode.innerHTML = "Example Debug";
   debug(exampleNode);
   expect(console.log).toHaveBeenCalledTimes(1);
   expect(console.log).toHaveBeenCalledWith(
-    expect.stringContaining("Example Debug")
+    expect.stringContaining("Example Debug"),
   );
 });

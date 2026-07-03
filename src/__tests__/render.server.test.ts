@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, cleanup, act, normalize } from "..";
-import Counter from "./fixtures/counter.marko";
-import SplitCounter from "./fixtures/split-counter.marko";
-import LegacyCounter from "./fixtures/legacy-counter";
+import { act, cleanup, fireEvent, normalize, render, screen } from "..";
 import Clickable from "./fixtures/clickable.marko";
+import Counter from "./fixtures/counter.marko";
 import HelloName from "./fixtures/hello-name.marko";
+import LegacyCounter from "./fixtures/legacy-counter";
+import SplitCounter from "./fixtures/split-counter.marko";
 
 test("renders static content in a document with a browser context", async () => {
   const { getByText, container } = await render(Counter);
@@ -11,7 +11,7 @@ test("renders static content in a document with a browser context", async () => 
     expect(getByText("Value: 0")).toHaveProperty([
       "ownerDocument",
       "defaultView",
-    ])
+    ]),
   ).not.toBeNull();
 
   expect(container.firstElementChild).toHaveAttribute("class", "counter");
@@ -45,7 +45,7 @@ test("renders static content from a Marko 3 component", async () => {
     expect(getByText("Value: 0")).toHaveProperty([
       "ownerDocument",
       "defaultView",
-    ])
+    ]),
   ).not.toBeNull();
 });
 
@@ -72,33 +72,33 @@ test("instance is undefined on the server", async () => {
 test("fails when rerendering", async () => {
   const { rerender } = await render(HelloName, { name: "Michael" });
   await expect(
-    rerender({ name: "Dylan" })
+    rerender({ name: "Dylan" }),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Components cannot re-render on the server side."`
+    `[Error: Components cannot re-render on the server side.]`,
   );
 });
 
 test("fails when checking emitted events", async () => {
   const { emitted } = await render(Clickable);
   expect(() => emitted("button-click")).toThrowErrorMatchingInlineSnapshot(
-    `"Components should not emit events on the server side."`
+    `[Error: Components should not emit events on the server side.]`,
   );
 });
 
 test("fails when calling act", async () => {
   const { getByText } = await render(Counter);
   await expect(
-    act(() => getByText("Increment").click())
+    act(() => getByText("Increment").click()),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
+    `[Error: Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment.]`,
   );
 });
 
 test("fails when emitting events", async () => {
   const { getByText } = await render(Counter);
   await expect(
-    fireEvent.click(getByText("Increment"))
+    fireEvent.click(getByText("Increment")),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `"Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."`
+    `[Error: Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment.]`,
   );
 });
