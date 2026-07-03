@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`errors when trying to record internal events 1`] = `[Error: The emitted helper cannot be used to listen to internal events.]`;
+
+exports[`local cleanup fails if component already cleaned up 1`] = `[Error: Component was already destroyed before cleanup called.]`;
+
+exports[`local cleanup fails if component already cleaned up 2`] = `[Error: Component was already destroyed before cleanup called.]`;
+
+exports[`records user events 1`] = `
+[
+  [
+    {
+      "count": 0,
+    },
+  ],
+  [
+    {
+      "count": 1,
+    },
+  ],
+]
+`;
+
+exports[`records user events 2`] = `
+[
+  "button-click",
+  "button-click",
+]
+`;
+
+exports[`records user events 3`] = `
+[
+  [
+    {
+      "count": 2,
+    },
+  ],
+]
+`;
+
+exports[`records user events 4`] = `
+[
+  "button-click",
+]
+`;

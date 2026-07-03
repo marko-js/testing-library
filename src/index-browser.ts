@@ -1,10 +1,11 @@
+import { logDOM, PrettyDOMOptions, within } from "@testing-library/dom";
+
 import type {
-  RenderOptions,
+  AsyncReturnValue,
   EventRecord,
   InternalEventNames,
-  AsyncReturnValue,
+  RenderOptions,
 } from "./shared";
-import { within, logDOM, PrettyDOMOptions } from "@testing-library/dom";
 import { INTERNAL_EVENTS } from "./shared";
 
 interface MountedComponent {
@@ -14,14 +15,15 @@ interface MountedComponent {
 }
 const mountedComponents = new Set<MountedComponent>();
 
-export { FireFunction, FireObject, fireEvent, act, normalize } from "./shared";
+export type { FireFunction, FireObject } from "./shared";
+export { act, fireEvent, normalize } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
 export async function render<T extends Marko.Template>(
   template: T | { default: T },
   input: Marko.TemplateInput<Marko.Input<T>> = {} as any,
-  options: RenderOptions = {}
+  options: RenderOptions = {},
 ) {
   if (template && "default" in template) {
     template = template.default;
@@ -29,6 +31,7 @@ export async function render<T extends Marko.Template>(
 
   let isDefaultContainer = false;
   const {
+    // eslint-disable-next-line no-constant-binary-expression
     container = (isDefaultContainer = true) &&
       document.body.appendChild(document.createElement("div")),
   } = options;
@@ -44,14 +47,13 @@ export async function render<T extends Marko.Template>(
     // Doesn't use promise API so that we can support Marko v3
     const renderResult = (await new Promise((resolve, reject) =>
       (template as any).render(input, (err: any, result: any) =>
-        err ? reject(err) : resolve(result)
-      )
+        err ? reject(err) : resolve(result),
+      ),
     )) as any;
 
     isV4 = !!renderResult.getComponent;
-    instance = renderResult
-      .appendTo(container)
-      [isV4 ? "getComponent" : "getWidget"]();
+    const getInstance = isV4 ? "getComponent" : "getWidget";
+    instance = renderResult.appendTo(container)[getInstance]();
     eventRecord = {};
 
     const _emit = instance.emit;
@@ -82,17 +84,17 @@ export async function render<T extends Marko.Template>(
     container,
     instance,
     emitted<N extends string = "*">(
-      type?: N extends InternalEventNames ? never : N
+      type?: N extends InternalEventNames ? never : N,
     ) {
       if (!eventRecord) {
         throw new Error(
-          "The emitted helper cannot be used with tags api components, used spies on function event handlers instead."
+          "The emitted helper cannot be used with tags api components, used spies on function event handlers instead.",
         );
       }
 
       if (INTERNAL_EVENTS.includes(type as InternalEventNames)) {
         throw new Error(
-          "The emitted helper cannot be used to listen to internal events."
+          "The emitted helper cannot be used to listen to internal events.",
         );
       }
 
@@ -136,7 +138,7 @@ export async function render<T extends Marko.Template>(
     cleanup() {
       if (!mountedComponents.has(mountedComponent)) {
         throw new Error(
-          "Component was already destroyed before cleanup called."
+          "Component was already destroyed before cleanup called.",
         );
       }
       cleanupComponent(mountedComponent);
@@ -144,7 +146,7 @@ export async function render<T extends Marko.Template>(
     debug: function debug(
       element?: Element | HTMLDocument | (Element | HTMLDocument)[] | undefined,
       maxLength?: number,
-      options?: PrettyDOMOptions
+      options?: PrettyDOMOptions,
     ) {
       if (!element) {
         debug(Array.from(container.children), maxLength, options);

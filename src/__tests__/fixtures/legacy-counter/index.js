@@ -1,5 +1,9 @@
-module.exports = require("marko-widgets").defineComponent({
-  template: require("./template.marko"),
+import { defineComponent } from "marko-widgets";
+
+import template from "./template.marko";
+
+export default defineComponent({
+  template,
   getInitialState() {
     return { count: 0 };
   },

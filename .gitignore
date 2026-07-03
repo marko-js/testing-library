@@ -1,18 +1,8 @@
-# Editor
-*.sublime*
 .vscode
-
-# OSX
+*.actual*
 *.DS_Store
-
-# NPM
+*.tsbuildinfo
+coverage
+dist
 node_modules
 npm-debug.log
-
-# Build
-dist
-*.tsbuildinfo
-
-# Coverage
-coverage
-.nyc_output

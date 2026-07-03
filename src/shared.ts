@@ -47,7 +47,7 @@ export function normalize<T extends DocumentFragment | Element>(container: T) {
   const document = container.ownerDocument!;
   const commentAndElementWalker = document.createTreeWalker(
     clone,
-    SHOW_ELEMENT | SHOW_COMMENT
+    SHOW_ELEMENT | SHOW_COMMENT,
   );
 
   let node: Comment | Element;
@@ -69,7 +69,7 @@ export function normalize<T extends DocumentFragment | Element>(container: T) {
         node.id = `GENERATED-${idIndex}`;
       }
 
-      for (let i = attributes.length; i--; ) {
+      for (let i = attributes.length; i--;) {
         const attr = attributes[i];
 
         if (/^data-(w-|widget$|marko(-|$))/.test(attr.name)) {
@@ -87,7 +87,7 @@ export function normalize<T extends DocumentFragment | Element>(container: T) {
       nextNode = elementWalker.nextNode();
       const { attributes } = node;
 
-      for (let i = attributes.length; i--; ) {
+      for (let i = attributes.length; i--;) {
         const attr = attributes[i];
         const { value } = attr;
         const updated = value
@@ -118,7 +118,7 @@ export async function act<T extends (...args: unknown[]) => unknown>(fn: T) {
   type Return = ReturnType<T>;
   if (typeof window === "undefined") {
     throw new Error(
-      "Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment."
+      "Cannot perform client side interaction tests on the server side. Please use @marko/testing-library in a browser environment.",
     );
   }
 
@@ -136,11 +136,11 @@ export const fireEvent = ((...params) =>
   (eventName: EventType) => {
     const fire = originalFireEvent[eventName];
     fireEvent[eventName] = (...params) => act(() => fire(...params));
-  }
+  },
 );
 
 export type AsyncReturnValue<
-  AsyncFunction extends (...args: any) => Promise<any>
+  AsyncFunction extends (...args: any) => Promise<any>,
 > = Parameters<
   NonNullable<Parameters<ReturnType<AsyncFunction>["then"]>[0]>
 >[0];
@@ -158,26 +158,26 @@ const tick =
         });
       }
     : typeof window === "object" && typeof window.postMessage === "function"
-    ? (() => {
-        let queue: Callback[] = [];
-        const id = `${Math.random()}`;
-        window.addEventListener("message", ({ data }) => {
-          if (data === id) {
-            const callbacks = queue;
-            queue = [];
-            for (const cb of callbacks) {
-              cb();
+      ? (() => {
+          let queue: Callback[] = [];
+          const id = `${Math.random()}`;
+          window.addEventListener("message", ({ data }) => {
+            if (data === id) {
+              const callbacks = queue;
+              queue = [];
+              for (const cb of callbacks) {
+                cb();
+              }
             }
-          }
-        });
+          });
 
-        return (cb: Callback) => {
-          if (queue.push(cb) === 1) {
-            window.postMessage(id, "*");
-          }
-        };
-      })()
-    : (cb: Callback) => setTimeout(cb, 0);
+          return (cb: Callback) => {
+            if (queue.push(cb) === 1) {
+              window.postMessage(id, "*");
+            }
+          };
+        })()
+      : (cb: Callback) => setTimeout(cb, 0);
 
 function waitForBatchedUpdates() {
   return new Promise(tick);

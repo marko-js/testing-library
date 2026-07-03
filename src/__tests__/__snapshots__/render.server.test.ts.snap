@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`local cleanup removes single component from the document 1`] = `[Error: Component was already destroyed before cleanup called.]`;

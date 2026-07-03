@@ -1,19 +1,21 @@
-import type {
-  AsyncReturnValue,
-  RenderOptions,
-  EventRecord,
-  InternalEventNames,
-} from "./shared";
-import { JSDOM } from "jsdom";
 import {
-  within,
-  logDOM,
   BoundFunctions,
+  logDOM,
   queries as Queries,
   screen as testingLibraryScreen,
+  within,
 } from "@testing-library/dom";
+import { JSDOM } from "jsdom";
 
-export { FireFunction, FireObject, fireEvent, act, normalize } from "./shared";
+import type {
+  AsyncReturnValue,
+  EventRecord,
+  InternalEventNames,
+  RenderOptions,
+} from "./shared";
+
+export type { FireFunction, FireObject } from "./shared";
+export { act, fireEvent, normalize } from "./shared";
 
 export type RenderResult = AsyncReturnValue<typeof render>;
 
@@ -24,17 +26,17 @@ let activeContainer: DocumentFragment | undefined;
 export async function render<T extends Marko.Template<any, any>>(
   template: T | { default: T },
   input: Marko.TemplateInput<Marko.Input<T>> = {} as any,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  options?: RenderOptions
+
+  options?: RenderOptions,
 ): Promise<
   BoundFunctions<typeof Queries> & {
     container: HTMLElement | DocumentFragment;
     instance: any;
     debug: (typeof testingLibraryScreen)["debug"];
     emitted<N extends string = "*">(
-      type?: N extends InternalEventNames ? never : N
+      type?: N extends InternalEventNames ? never : N,
     ): NonNullable<EventRecord[N]>;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     rerender(newInput?: typeof input): Promise<void>;
     cleanup(): void;
   }
@@ -52,9 +54,9 @@ export async function render<T extends Marko.Template<any, any>>(
           (template as any)[
             (template as any).renderToString ? "renderToString" : "render"
           ]!(input, (err: any, result: any) =>
-            err ? reject(err) : resolve(result)
-          )
-        ))
+            err ? reject(err) : resolve(result),
+          ),
+        )),
   );
 
   const {
@@ -62,7 +64,7 @@ export async function render<T extends Marko.Template<any, any>>(
   } = new JSDOM();
   const container = (activeContainer = document.importNode(
     JSDOM.fragment(html),
-    true
+    true,
   ));
   (container as any).outerHTML = html; // Fixes prettyDOM for container
 
@@ -88,21 +90,20 @@ export async function render<T extends Marko.Template<any, any>>(
     container,
     instance: undefined as any,
     emitted<N extends string = "*">(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      type?: N extends InternalEventNames ? never : N
+      type?: N extends InternalEventNames ? never : N,
     ): NonNullable<EventRecord[N]> {
       throw new Error("Components should not emit events on the server side.");
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     rerender(newInput?: typeof input): Promise<void> {
       return Promise.reject(
-        new Error("Components cannot re-render on the server side.")
+        new Error("Components cannot re-render on the server side."),
       );
     },
     cleanup() {
       if (activeContainer !== container) {
         throw new Error(
-          "Component was already destroyed before cleanup called."
+          "Component was already destroyed before cleanup called.",
         );
       }
 
