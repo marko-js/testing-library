@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install node
         id: node
         uses: actions/setup-node@v6
@@ -38,7 +38,7 @@ jobs:
         node: [lts/*, lts/-1, lts/-2]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install node
         id: node
         uses: actions/setup-node@v6
@@ -50,7 +50,7 @@ jobs:
       - name: Run tests
         run: npm run @ci:test
       - name: Report coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: marko-js/testing-library
@@ -64,7 +64,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install node
         id: node
         uses: actions/setup-node@v6
