@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.2
+
+### Patch Changes
+
+- [#30](https://github.com/marko-js/testing-library/pull/30) [`96b0cd1`](https://github.com/marko-js/testing-library/commit/96b0cd1a769d407a916b58f16a292301e4ad3233) Thanks [@DylanPiercey](https://github.com/DylanPiercey)! - Modernize tooling to match marko-js/prettier: ESLint flat config, Prettier 3, Husky 9, changesets, rolldown for bundling, and Vitest (jsdom + node projects via @marko/vite) for testing. Upgrade dependencies to latest (Marko 5, jsdom 29, @testing-library/jest-dom 6, TypeScript 6, etc.).
+
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ### [6.4.1](https://github.com/marko-js/testing-library/compare/v6.4.0...v6.4.1) (2025-08-15)
