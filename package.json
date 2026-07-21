@@ -35,11 +35,11 @@
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "@ci:build": "npm run build",
+    "@ci:build": "pnpm run build",
     "@ci:lint": "eslint . && prettier . --check --log-level=warn",
-    "@ci:release": "npm run build && changeset publish && npm ci",
+    "@ci:release": "pnpm run build && changeset publish && pnpm install --frozen-lockfile",
     "@ci:test": "vitest run --coverage --no-color",
-    "@ci:version": "npm run build && changeset version && npm run format && npm i --package-lock-only",
+    "@ci:version": "pnpm run build && changeset version && pnpm run format && pnpm install --lockfile-only",
     "build": "rolldown -c && tsc",
     "change": "changeset add",
     "format": "eslint --fix .; prettier . --write --log-level=warn",
@@ -79,5 +79,6 @@
   },
   "peerDependencies": {
     "marko": "3 - 6"
-  }
+  },
+  "packageManager": "pnpm@11.15.1"
 }
